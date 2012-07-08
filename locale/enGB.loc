@@ -18,3 +18,4 @@ dictionary:
   Failed: null
   Message (optional): null
   Save: null
+  CurrentLocaleName: English
