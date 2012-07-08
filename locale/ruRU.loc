@@ -1,0 +1,21 @@
+name: Русский
+dictionary:
+  CurrentLocaleName: Русский
+  Neerc hall console: Neerc панель холла
+  Tasks: Задания
+  Language: Язык
+  Help: Справка
+  About: О программе
+  ID: Ид
+  Time: Время
+  Text: Задание
+  Active tasks: Активные задания
+  History: История
+  State: Статус
+  Assigned: Назначено
+  In progress: В процессе
+  Done: Выполнено
+  Failed: Не удалось
+  Message (optional): Сообщение (опционально)
+  Save: Сохранить
+  State change: Изменить статус

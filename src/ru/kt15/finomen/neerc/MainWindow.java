@@ -6,12 +6,26 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
-public class MainWindow {
+public class MainWindow implements Localized {
 
 	protected Shell shell;
 	private TaskWindow taskTab;
+	private final LocaleManager localeManager;
+	private CTabFolder tabFolder;
+	private CTabItem tbtmTasks;
+	private MenuItem mntmLanguage;
+	private MenuItem mntmHelp;
+	private MenuItem mntmHelp_1;
+	private MenuItem mntmAbout;
+	
+	public MainWindow(LocaleManager localeManager) {
+		this.localeManager = localeManager;
+	}
 
 	/**
 	 * Launch the application.
@@ -19,7 +33,8 @@ public class MainWindow {
 	 */
 	public static void main(String[] args) {
 		try {
-			MainWindow window = new MainWindow();
+			LocaleManager lm = new LocaleManager();
+			MainWindow window = new MainWindow(lm);
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -40,6 +55,15 @@ public class MainWindow {
 			}
 		}
 	}
+	
+	public void setLocaleStrings() {
+		shell.setText(localeManager.localize("Neerc hall console"));
+		tbtmTasks.setText(localeManager.localize("Tasks"));
+		mntmLanguage.setText(localeManager.localize("Language"));
+		mntmHelp.setText(localeManager.localize("Help"));
+		mntmHelp_1.setText(localeManager.localize("Help"));
+		mntmAbout.setText(localeManager.localize("About"));
+	}
 
 	/**
 	 * Create contents of the window.
@@ -47,17 +71,60 @@ public class MainWindow {
 	protected void createContents() {
 		shell = new Shell();
 		shell.setSize(570, 474);
-		shell.setText("SWT Application");
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		CTabFolder tabFolder = new CTabFolder(shell, SWT.BORDER);
+		tabFolder = new CTabFolder(shell, SWT.BORDER);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		
-		CTabItem tbtmTasks = new CTabItem(tabFolder, SWT.NONE);
-		tbtmTasks.setText("Tasks");
-		
-		taskTab = new TaskWindow(tabFolder, SWT.BORDER);
+		tbtmTasks = new CTabItem(tabFolder, SWT.NONE);
+				
+		taskTab = new TaskWindow(localeManager, tabFolder, SWT.BORDER);
 		tbtmTasks.setControl(taskTab);
+		
+		Menu menu = new Menu(shell, SWT.BAR);
+		shell.setMenuBar(menu);
+		
+		mntmLanguage = new MenuItem(menu, SWT.CASCADE);	
+		
+		Menu menu_2 = new Menu(mntmLanguage);
+		mntmLanguage.setMenu(menu_2);
+		
+		for(final LocaleManager.Locale locale : localeManager.getLocales()) {
+			MenuItem cLocale = new MenuItem(menu_2, SWT.RADIO);
+			if (locale == localeManager.getCurrentLocale()) {
+				cLocale.setSelection(true);
+			}
+			cLocale.setText(locale.getName());
+			cLocale.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent arg0) {
+					//FIME: double change
+					localeManager.setLocale(locale);
+				}
+				
+				@Override
+				public void widgetDefaultSelected(SelectionEvent arg0) {
+				}
+			});
+		}
+		
+		
+		mntmHelp = new MenuItem(menu, SWT.CASCADE);
+		
+		Menu menu_1 = new Menu(mntmHelp);
+		mntmHelp.setMenu(menu_1);
+		
+		mntmHelp_1 = new MenuItem(menu_1, SWT.NONE);
+				
+		new MenuItem(menu_1, SWT.SEPARATOR);
+		
+		mntmAbout = new MenuItem(menu_1, SWT.NONE);
+		
+		localeManager.addLocalizedObject(this);
+	}
 
+	@Override
+	public boolean isDisposed() {
+		return shell.isDisposed();
 	}
 }

@@ -15,7 +15,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
-public class TaskStateChange extends Dialog {
+public class TaskStateChange extends Dialog implements Localized {
 
 	protected Object result;
 	protected Shell shell;
@@ -23,15 +23,24 @@ public class TaskStateChange extends Dialog {
 	private Text text;
 	private boolean assignedEnabled, inProgressEnabled, doneEnabled, failedEnabled;
 	private Task.TaskState.StateId state;
+	private LocaleManager localeManager;
+	private Group grpState;
+	private Button btnAssigned;
+	private Button btnDone;
+	private Button btnInProgress;
+	private Button btnFailed;
+	private Button btnSave;
+	private Group grpMessageoptional;
 	/**
 	 * Create the dialog.
+	 * @param localeManager 
 	 * @param parent
 	 * @param style
 	 */
-	public TaskStateChange(Task task, Shell parent, int style) {
+	public TaskStateChange(LocaleManager localeManager, Task task, Shell parent, int style) {
 		super(parent, style);
+		this.localeManager = localeManager;
 		this.task = task;
-		setText("SWT Dialog");
 		assignedEnabled = inProgressEnabled = doneEnabled = failedEnabled = false;
 		for (Task.TaskState.StateId sid : task.getPossibleStates()) {
 			switch(sid) {
@@ -82,34 +91,27 @@ public class TaskStateChange extends Dialog {
 		
 		
 		
-		Group grpState = new Group(shell, SWT.NONE);
-		grpState.setText("State");
+		grpState = new Group(shell, SWT.NONE);
 		grpState.setLayout(new FillLayout(SWT.VERTICAL));
 		
-		final Button btnAssigned = new Button(grpState, SWT.RADIO);
-		btnAssigned.setText("Assigned");
+		btnAssigned = new Button(grpState, SWT.RADIO);
 		
-		final Button btnInProgress = new Button(grpState, SWT.RADIO);
-		btnInProgress.setText("In progress");
+		btnInProgress = new Button(grpState, SWT.RADIO);
 		
-		final Button btnDone = new Button(grpState, SWT.RADIO);
-		btnDone.setText("Done");
+		btnDone = new Button(grpState, SWT.RADIO);
 		
-		final Button btnFailed = new Button(grpState, SWT.RADIO);
-		btnFailed.setText("Failed");
-		
-		Group grpMessageoptional = new Group(shell, SWT.NONE);
+		btnFailed = new Button(grpState, SWT.RADIO);
+				
+		grpMessageoptional = new Group(shell, SWT.NONE);
 		GridData gd_grpMessageoptional = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
 		gd_grpMessageoptional.widthHint = 244;
 		grpMessageoptional.setLayoutData(gd_grpMessageoptional);
-		grpMessageoptional.setText("Message (optional)");
 		grpMessageoptional.setLayout(new FillLayout(SWT.HORIZONTAL));
 			
 		text = new Text(grpMessageoptional, SWT.BORDER | SWT.MULTI);
 		new Label(shell, SWT.NONE);
 		
-		Button btnSave = new Button(shell, SWT.NONE);
-		btnSave.setText("Save");
+		btnSave = new Button(shell, SWT.NONE);
 		
 		btnAssigned.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -171,7 +173,25 @@ public class TaskStateChange extends Dialog {
 			}
 		});
 		
-		
 		shell.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true));
+		
+		localeManager.addLocalizedObject(this);
+	}
+
+	@Override
+	public void setLocaleStrings() {
+		shell.setText(localeManager.localize("State change"));
+		grpState.setText(localeManager.localize("State"));
+		btnAssigned.setText(localeManager.localize("Assigned"));
+		btnInProgress.setText(localeManager.localize("In progress"));
+		btnDone.setText(localeManager.localize("Done"));
+		btnFailed.setText(localeManager.localize("Failed"));
+		grpMessageoptional.setText(localeManager.localize("Message (optional)"));
+		btnSave.setText(localeManager.localize("Save"));		
+	}
+	
+	@Override
+	public boolean isDisposed() {
+		return shell.isDisposed();
 	}
 }

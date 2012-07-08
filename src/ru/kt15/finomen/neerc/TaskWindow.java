@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -23,7 +24,7 @@ import ru.kt15.finomen.neerc.Task.TaskPerformer;
 import ru.kt15.finomen.neerc.Task.TaskState;
 import org.eclipse.swt.widgets.Menu;
 
-public class TaskWindow extends Composite implements TaskListener {
+public class TaskWindow extends Composite implements TaskListener, Localized {
 	private Table activeTasks;
 	private Table historyTasks;
 	private Map<Task.TaskPerformer, Integer> knownPerformerActive;
@@ -32,6 +33,15 @@ public class TaskWindow extends Composite implements TaskListener {
 	private Map<Task.TaskPerformer, TableColumn> performerHistoryColumn;
 	private Map<Integer, TableItem> taskActiveRow;
 	private Map<Integer, TableItem> taskHistoryRow;
+	private LocaleManager localeManager;
+	private TableColumn tblclmnActiveText;
+	private TableColumn tblclmnActiveTime;
+	private TableColumn tblclmnActiveId;
+	private Group grpActiveTasks;
+	private TableColumn tblclmnId_1;
+	private TableColumn tblclmnTime_1;
+	private TableColumn tblclmnText_1;
+	private Group grpHistory;
 	
 	private static class TableResizer implements Listener {
 		private final Table table;
@@ -90,7 +100,7 @@ public class TaskWindow extends Composite implements TaskListener {
 		
 	}
 	
-	static class StateChangeListener implements Listener {
+	class StateChangeListener implements Listener {
 		private final Table table;
 		private final Shell shell;
 		public StateChangeListener(Shell shell, Table table) {
@@ -105,7 +115,7 @@ public class TaskWindow extends Composite implements TaskListener {
 			if (sel.length == 1) {
 				Task task = (Task) sel[0].getData();
 				if (task.getState() != null) {
-					new TaskStateChange(task, shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM).open();
+					new TaskStateChange(localeManager, task, shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM).open();
 				}
 			}
 		}
@@ -114,11 +124,13 @@ public class TaskWindow extends Composite implements TaskListener {
 	
 	/**
 	 * Create the composite.
+	 * @param localeManager 
 	 * @param parent
 	 * @param style
 	 */
-	public TaskWindow(Composite parent, int style) {
+	public TaskWindow(LocaleManager localeManager, Composite parent, int style) {
 		super(parent, style);
+		this.localeManager = localeManager;
 		
 		
 		knownPerformerActive = new HashMap<Task.TaskPerformer, Integer>();
@@ -130,8 +142,7 @@ public class TaskWindow extends Composite implements TaskListener {
 		
 		setLayout(new FillLayout(SWT.VERTICAL));
 		
-		Group grpActiveTasks = new Group(this, SWT.NONE);
-		grpActiveTasks.setText("Active tasks");
+		grpActiveTasks = new Group(this, SWT.NONE);
 		grpActiveTasks.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		activeTasks = new Table(grpActiveTasks, SWT.BORDER | SWT.FULL_SELECTION);
@@ -141,20 +152,16 @@ public class TaskWindow extends Composite implements TaskListener {
 		int[] mask = {50, 100, 0};
 		new TableResizer(activeTasks, mask);
 		
-		TableColumn tblclmnId = new TableColumn(activeTasks, SWT.NONE);
-		tblclmnId.setWidth(100);
-		tblclmnId.setText("ID");
+		tblclmnActiveId = new TableColumn(activeTasks, SWT.NONE);
+		tblclmnActiveId.setWidth(100);
+				
+		tblclmnActiveTime = new TableColumn(activeTasks, SWT.NONE);
+		tblclmnActiveTime.setWidth(100);
 		
-		TableColumn tblclmnTime = new TableColumn(activeTasks, SWT.NONE);
-		tblclmnTime.setWidth(100);
-		tblclmnTime.setText("Time");
+		tblclmnActiveText = new TableColumn(activeTasks, SWT.NONE);
+		tblclmnActiveText.setWidth(100);
 		
-		TableColumn tblclmnText = new TableColumn(activeTasks, SWT.NONE);
-		tblclmnText.setWidth(100);
-		tblclmnText.setText("Text");
-		
-		Group grpHistory = new Group(this, SWT.NONE);
-		grpHistory.setText("History");
+		grpHistory = new Group(this, SWT.NONE);
 		grpHistory.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		historyTasks = new Table(grpHistory, SWT.BORDER | SWT.FULL_SELECTION);
@@ -162,17 +169,14 @@ public class TaskWindow extends Composite implements TaskListener {
 		historyTasks.setLinesVisible(true);
 		new TableResizer(historyTasks, mask);
 		
-		TableColumn tblclmnId_1 = new TableColumn(historyTasks, SWT.NONE);
+		tblclmnId_1 = new TableColumn(historyTasks, SWT.NONE);
 		tblclmnId_1.setWidth(100);
-		tblclmnId_1.setText("ID");
-		
-		TableColumn tblclmnTime_1 = new TableColumn(historyTasks, SWT.NONE);
+				
+		tblclmnTime_1 = new TableColumn(historyTasks, SWT.NONE);
 		tblclmnTime_1.setWidth(100);
-		tblclmnTime_1.setText("Time");
 		
-		TableColumn tblclmnText_1 = new TableColumn(historyTasks, SWT.NONE);
+		tblclmnText_1 = new TableColumn(historyTasks, SWT.NONE);
 		tblclmnText_1.setWidth(100);
-		tblclmnText_1.setText("Text");
 		
 		new StateChangeListener(getShell(), activeTasks);
 		new StateChangeListener(getShell(), historyTasks);
@@ -220,6 +224,8 @@ public class TaskWindow extends Composite implements TaskListener {
 			}
 			
 		}).start();
+		
+		localeManager.addLocalizedObject(this);
 	}
 
 	@Override
@@ -232,7 +238,6 @@ public class TaskWindow extends Composite implements TaskListener {
 			if (knownPerformers.containsKey(performer)) {
 				knownPerformers.put(performer, knownPerformers.get(performer) + 1);
 			} else {
-				System.out.println("Add column " + performer.getName());
 				TableColumn tblclmn = new TableColumn(table, SWT.NONE);
 				tblclmn.setWidth(100);
 				tblclmn.setText(performer.getName());
@@ -264,7 +269,8 @@ public class TaskWindow extends Composite implements TaskListener {
 		for (Task.TaskPerformer performer : task.getPerformerList()) {
 			for (int i = 3; i < table.getColumnCount(); ++i) {
 				if (performer.equals(table.getColumns()[table.getColumnOrder()[i]].getData())) {
-					row.setText(table.getColumnOrder()[i], task.getState(performer).getId().name());
+					row.setText(table.getColumnOrder()[i], task.getState(performer).getMessage());
+					row.setImage(table.getColumnOrder()[i], new Image(getDisplay(), "resources/icons/STATUS_" + task.getState(performer).getId().name() + ".png"));
 				}
 			}
 		}
@@ -337,5 +343,17 @@ public class TaskWindow extends Composite implements TaskListener {
 			}
 			
 		});
+	}
+
+	@Override
+	public void setLocaleStrings() {
+		tblclmnActiveId.setText(localeManager.localize("ID"));
+		tblclmnActiveTime.setText(localeManager.localize("Time"));
+		tblclmnActiveText.setText(localeManager.localize("Text"));
+		tblclmnId_1.setText(localeManager.localize("ID"));
+		tblclmnTime_1.setText(localeManager.localize("Time"));
+		tblclmnText_1.setText(localeManager.localize("Text"));
+		grpActiveTasks.setText(localeManager.localize("Active tasks"));
+		grpHistory.setText(localeManager.localize("History"));
 	}
 }

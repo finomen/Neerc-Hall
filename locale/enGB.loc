@@ -1,0 +1,20 @@
+name: English
+dictionary:
+  Neerc hall console: Neerc hall console
+  Tasks: Tasks
+  Language: Language
+  Help: Help
+  About: null
+  ID: null
+  Time: null
+  Text: null
+  Active tasks: null
+  History: null
+  State change: null
+  State: null
+  Assigned: null
+  In progress: null
+  Done: null
+  Failed: null
+  Message (optional): null
+  Save: null
