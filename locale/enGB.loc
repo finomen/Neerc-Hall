@@ -19,3 +19,8 @@ dictionary:
   Message (optional): null
   Save: null
   CurrentLocaleName: English
+  Chat: null
+  Users: null
+  Send: null
+  User: null
+  Message: null

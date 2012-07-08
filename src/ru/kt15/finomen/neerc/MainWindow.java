@@ -15,9 +15,11 @@ public class MainWindow implements Localized {
 
 	protected Shell shell;
 	private TaskWindow taskTab;
+	private ChatWindow chatTab;
 	private final LocaleManager localeManager;
 	private CTabFolder tabFolder;
 	private CTabItem tbtmTasks;
+	private CTabItem tbtmChat;
 	private MenuItem mntmLanguage;
 	private MenuItem mntmHelp;
 	private MenuItem mntmHelp_1;
@@ -59,6 +61,7 @@ public class MainWindow implements Localized {
 	public void setLocaleStrings() {
 		shell.setText(localeManager.localize("Neerc hall console"));
 		tbtmTasks.setText(localeManager.localize("Tasks"));
+		tbtmChat.setText(localeManager.localize("Chat"));
 		mntmLanguage.setText(localeManager.localize("Language"));
 		mntmHelp.setText(localeManager.localize("Help"));
 		mntmHelp_1.setText(localeManager.localize("Help"));
@@ -80,6 +83,10 @@ public class MainWindow implements Localized {
 				
 		taskTab = new TaskWindow(localeManager, tabFolder, SWT.BORDER);
 		tbtmTasks.setControl(taskTab);
+		
+		tbtmChat = new CTabItem(tabFolder, SWT.NONE);
+		chatTab = new ChatWindow(localeManager, tabFolder, SWT.BORDER);
+		tbtmChat.setControl(chatTab);
 		
 		Menu menu = new Menu(shell, SWT.BAR);
 		shell.setMenuBar(menu);

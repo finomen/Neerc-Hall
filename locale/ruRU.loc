@@ -19,3 +19,8 @@ dictionary:
   Message (optional): Сообщение (опционально)
   Save: Сохранить
   State change: Изменить статус
+  Chat: Чат
+  Users: Пользователи
+  Send: Отправить
+  User: Пользователь
+  Message: Сообщение
