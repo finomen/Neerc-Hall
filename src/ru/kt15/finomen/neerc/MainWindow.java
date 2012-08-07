@@ -127,6 +127,19 @@ public class MainWindow implements Localized {
 		
 		mntmAbout = new MenuItem(menu_1, SWT.NONE);
 		
+		mntmAbout.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				new About(localeManager, shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM).open();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+				
 		localeManager.addLocalizedObject(this);
 	}
 
