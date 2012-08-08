@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ru.kt15.finomen.neerc.tests;
+package ru.kt15.finomen.neerc.hall.tests;
 
 import static org.junit.Assert.*;
 
@@ -12,10 +12,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
 
-import ru.kt15.finomen.neerc.Task;
-import ru.kt15.finomen.neerc.TaskListener;
-import ru.kt15.finomen.neerc.TaskManager;
-import ru.kt15.finomen.neerc.Task.TaskState;
+import ru.kt15.finomen.neerc.hall.Task;
+import ru.kt15.finomen.neerc.hall.TaskListener;
+import ru.kt15.finomen.neerc.hall.TaskManager;
+import ru.kt15.finomen.neerc.hall.Task.TaskState;
 
 /**
  * @author Nikolay Filchenko
@@ -41,7 +41,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskState#assigned()
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskState#assigned()
 	 */
 	@Test
 	public void testTaskTaskStateAssigned() {
@@ -51,7 +51,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskState#updating()
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskState#updating()
 	 */
 	@Test
 	public void testTaskTaskStateUpdating() {
@@ -61,7 +61,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskState#inProgress()
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskState#inProgress()
 	 */
 	@Test
 	public void testTaskTaskStateInProgress() {
@@ -71,7 +71,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskState#inProgress(String)
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskState#inProgress(String)
 	 */
 	@Test
 	public void testTaskTaskStateInProgressString() {
@@ -81,7 +81,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskState#Done()
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskState#Done()
 	 */
 	@Test
 	public void testTaskTaskStateDone() {
@@ -91,7 +91,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskState#Done(String)
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskState#Done(String)
 	 */
 	@Test
 	public void testTaskTaskStateDoneString() {
@@ -101,7 +101,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskState#Failed()
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskState#Failed()
 	 */
 	@Test
 	public void testTaskTaskStateFailed() {
@@ -111,7 +111,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskState#Failed(String)
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskState#Failed(String)
 	 */
 	@Test
 	public void testTaskTaskStateFailedString() {
@@ -121,7 +121,7 @@ public class TestTask {
 	}	
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskPerformer#TaskPerformer(String)
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskPerformer#TaskPerformer(String)
 	 */
 	@Test
 	public void testTaskTaskPerformerString() {
@@ -130,7 +130,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskPerformer#hashCode()
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskPerformer#hashCode()
 	 */
 	@Test
 	public void testTaskTaskPerformerHashCode() {
@@ -139,7 +139,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task.TaskPerformer#equals(Object)
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task.TaskPerformer#equals(Object)
 	 */
 	@Test
 	public void testTaskTaskPerformerEquals() {
@@ -154,7 +154,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#Task(ru.kt15.finomen.neerc.TaskManager, int, java.lang.String, java.util.Date, ru.kt15.finomen.neerc.Task.TaskPerformer[], ru.kt15.finomen.neerc.Task.TaskState.StateId[])}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#Task(ru.kt15.finomen.neerc.hall.TaskManager, int, java.lang.String, java.util.Date, ru.kt15.finomen.neerc.hall.Task.TaskPerformer[], ru.kt15.finomen.neerc.hall.Task.TaskState.StateId[])}.
 	 */
 	@Test
 	public void testTaskTaskManagerIntStringDateTaskPerformerArrayStateIdArray() {
@@ -172,7 +172,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#Task(ru.kt15.finomen.neerc.TaskManager, int, java.lang.String, java.util.Date, ru.kt15.finomen.neerc.Task.TaskPerformer[], ru.kt15.finomen.neerc.Task.TaskState.StateId[], java.util.Map)}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#Task(ru.kt15.finomen.neerc.hall.TaskManager, int, java.lang.String, java.util.Date, ru.kt15.finomen.neerc.hall.Task.TaskPerformer[], ru.kt15.finomen.neerc.hall.Task.TaskState.StateId[], java.util.Map)}.
 	 */
 	@Test
 	public void testTaskTaskManagerIntStringDateTaskPerformerArrayStateIdArrayMapOfTaskPerformerTaskState() {
@@ -194,7 +194,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#getId()}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#getId()}.
 	 */
 	@Test
 	public void testGetId() {
@@ -207,7 +207,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#getText()}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#getText()}.
 	 */
 	@Test
 	public void testGetText() {
@@ -223,7 +223,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#getTime()}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#getTime()}.
 	 */
 	@Test
 	public void testGetTime() {
@@ -239,7 +239,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#getPerformerList()}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#getPerformerList()}.
 	 */
 	@Test
 	public void testGetPerformerList() {
@@ -256,7 +256,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#getState()}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#getState()}.
 	 */
 	@Test
 	public void testGetState() {
@@ -272,7 +272,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#getState(ru.kt15.finomen.neerc.Task.TaskPerformer)}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#getState(ru.kt15.finomen.neerc.hall.Task.TaskPerformer)}.
 	 */
 	@Test
 	public void testGetStateTaskPerformer() {
@@ -289,7 +289,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#getPossibleStates()}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#getPossibleStates()}.
 	 */
 	@Test
 	public void testGetPossibleStates() {
@@ -306,7 +306,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#changeState(ru.kt15.finomen.neerc.Task.TaskState)}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#changeState(ru.kt15.finomen.neerc.hall.Task.TaskState)}.
 	 */
 	@Test
 	public void testChangeState() {
@@ -333,7 +333,7 @@ public class TestTask {
 	}
 
 	/**
-	 * Test method for {@link ru.kt15.finomen.neerc.Task#equals(java.lang.Object)}.
+	 * Test method for {@link ru.kt15.finomen.neerc.hall.Task#equals(java.lang.Object)}.
 	 */
 	@Test
 	public void testEqualsObject() {

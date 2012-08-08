@@ -1,6 +1,6 @@
-package ru.kt15.finomen.neerc;
+package ru.kt15.finomen.neerc.hall;
 
-import ru.kt15.finomen.neerc.Task.TaskPerformer;
+import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
 
 public interface TaskManager {
 	public void changeTaskState(int id, Task.TaskState state);

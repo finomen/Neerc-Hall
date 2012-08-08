@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ru.kt15.finomen.neerc;
+package ru.kt15.finomen.neerc.hall;
 
 /**
  * @author Nikolay Filchenko

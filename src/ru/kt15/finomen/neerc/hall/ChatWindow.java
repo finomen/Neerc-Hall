@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc;
+package ru.kt15.finomen.neerc.hall;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;

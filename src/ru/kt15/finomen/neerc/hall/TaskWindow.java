@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc;
+package ru.kt15.finomen.neerc.hall;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -19,8 +19,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.TableColumn;
 
-import ru.kt15.finomen.neerc.Task.TaskPerformer;
-import ru.kt15.finomen.neerc.Task.TaskState;
+import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
+import ru.kt15.finomen.neerc.hall.Task.TaskState;
+
 import org.eclipse.swt.widgets.Menu;
 
 public class TaskWindow extends Composite implements TaskListener, Localized {

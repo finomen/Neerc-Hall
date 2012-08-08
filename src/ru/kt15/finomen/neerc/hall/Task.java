@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc;
+package ru.kt15.finomen.neerc.hall;
 
 import java.util.Date;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc;
+package ru.kt15.finomen.neerc.hall;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
