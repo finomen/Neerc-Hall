@@ -1,0 +1,21 @@
+option java_package = "ru.kt15.finomen.neerc.core.net.proto";
+
+enum TaskState {
+	ASSIGNED = 0;
+	IN_PROGRESS = 1;
+	DONE = 2;
+	FAILED = 3;
+}
+
+message TaskPerformer {
+	required string name = 1;
+	required TaskState state = 2;
+}
+
+message Task {
+	required int32 id = 1;
+	optional string text = 2;
+	optional uint64 time = 3;
+	repeated TaskPerformer performers = 4;
+	repeated TaskState possibleStates = 5;
+}

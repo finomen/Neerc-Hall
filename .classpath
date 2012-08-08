@@ -8,5 +8,8 @@
 	<classpathentry kind="lib" path="snakeyaml-1.10-javadoc.jar"/>
 	<classpathentry kind="lib" path="snakeyaml-1.10-sources.jar"/>
 	<classpathentry kind="lib" path="snakeyaml-1.10.jar"/>
+	<classpathentry kind="lib" path="protobuf-java-2.3.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="protobuf-java-2.3.0-sources.jar"/>
+	<classpathentry kind="lib" path="protobuf-java-2.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

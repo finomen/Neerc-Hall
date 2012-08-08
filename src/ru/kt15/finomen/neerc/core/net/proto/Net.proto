@@ -1,0 +1,7 @@
+option java_package = "ru.kt15.finomen.neerc.core.net.proto";
+
+message ProtobufPacket {
+	required string group = 1;
+	required string type = 2;
+	required bytes data = 3;
+}
