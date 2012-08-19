@@ -135,4 +135,10 @@ public class VirtualNetwork extends ProtobufConnection{
 		streamChannels.remove(id);
 		return null;
 	}
+
+	@Override
+	public boolean isConnected() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

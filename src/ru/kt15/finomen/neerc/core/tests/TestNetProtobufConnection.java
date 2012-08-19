@@ -30,6 +30,11 @@ public class TestNetProtobufConnection {
 			assertEquals("group", p.getGroup());
 			assertEquals("data", p.getData().toStringUtf8());
 		}
+
+		@Override
+		public boolean isConnected() {
+			return true;
+		}
 	}
 	
 	@Test
@@ -61,6 +66,12 @@ public class TestNetProtobufConnection {
 			assertEquals("group", p.getGroup());
 			assertEquals("data", p.getData().toStringUtf8());
 		}
+
+		@Override
+		public boolean isConnected() {
+			// TODO Auto-generated method stub
+			return false;
+		}
 	}
 	
 	@Test
@@ -79,6 +90,12 @@ public class TestNetProtobufConnection {
 		@Override
 		public void sendTo(Endpoint destination, ByteString data) {		
 			onRecv(destination, data);
+		}
+
+		@Override
+		public boolean isConnected() {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 	
@@ -122,6 +139,12 @@ public class TestNetProtobufConnection {
 			public void sendTo(Endpoint destination, ByteString data) {
 				onRecv(destination, data);
 			}
+
+			@Override
+			public boolean isConnected() {
+				// TODO Auto-generated method stub
+				return false;
+			}
 		};
 		Log.setImpl(new Log() {
 			
@@ -159,6 +182,12 @@ public class TestNetProtobufConnection {
 			@Override
 			public void sendTo(Endpoint destination, ByteString data) {
 				onRecv(destination, ByteString.copyFromUtf8(("Bad" + data.toStringUtf8())));
+			}
+
+			@Override
+			public boolean isConnected() {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		};
 		Log.setImpl(new Log() {

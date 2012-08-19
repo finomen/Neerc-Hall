@@ -8,5 +8,6 @@ message ProtobufPacket {
 
 message NetMessage {
 	required string destinationId = 1;
-	required bytes data = 2;
+	required string sourceId = 2;
+	required bytes data = 3;
 }

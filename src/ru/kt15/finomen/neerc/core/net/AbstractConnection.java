@@ -16,4 +16,8 @@ public interface AbstractConnection {
 	 * Callback called when packet received
 	 */
 	void onRecv(Endpoint source, ByteString data);
+	/**
+	 * @return if connection estabilished
+	 */
+	boolean isConnected();
 }
