@@ -7,6 +7,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 
+import ru.kt15.finomen.neerc.core.LocaleManager;
+import ru.kt15.finomen.neerc.core.Localized;
+
 public class About extends Dialog implements Localized {
 
 	protected Object result;

@@ -5,3 +5,8 @@ message ProtobufPacket {
 	required string type = 2;
 	required bytes data = 3;
 }
+
+message NetMessage {
+	required string destinationId = 1;
+	required bytes data = 2;
+}

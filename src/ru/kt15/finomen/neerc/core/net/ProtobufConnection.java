@@ -2,7 +2,11 @@ package ru.kt15.finomen.neerc.core.net;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import ru.kt15.finomen.neerc.core.Log;
 import ru.kt15.finomen.neerc.core.net.proto.Net;
 
 import com.google.protobuf.ByteString;
@@ -10,6 +14,13 @@ import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public abstract class ProtobufConnection implements AbstractConnection {
+	private Set<Object> handlers;
+	
+	public ProtobufConnection() {
+		handlers = new HashSet();
+		handlers.add(this);
+	}
+	
 	public <MessageType extends GeneratedMessage> void sendTo(Endpoint destination, MessageType message) {
 		sendTo(destination, 
 				Net.ProtobufPacket.newBuilder()
@@ -19,7 +30,13 @@ public abstract class ProtobufConnection implements AbstractConnection {
 					.build().toByteString());
 	}
 	
-	public abstract <MessageType> void onRecv(Endpoint source, MessageType message);
+	public void AddHandler(Object handler) {		
+		handlers.add(handler);
+	}
+	
+	public void RemoveHandler(Object handler) {
+		handlers.remove(handler);
+	}
 	
 	@Override
 	public void onRecv(Endpoint source, ByteString data) {
@@ -29,9 +46,26 @@ public abstract class ProtobufConnection implements AbstractConnection {
 			packageClass = Class.forName(packet.getGroup() + "$" + packet.getType());
 			Method method = packageClass.getMethod("parseFrom", ByteString.class);
 			Object obj = method.invoke(null, packet.getData());
-			onRecv(source, packageClass.cast(obj));			
+			
+			boolean handled = false;
+			for (Object handler : handlers) {
+				try {
+					Method onRecv = handler.getClass().getMethod("handlePacket", Endpoint.class, packageClass);
+					onRecv.invoke(handler, source, packageClass.cast(obj));
+					handled = true;
+				} catch(NoSuchMethodException e) {
+					//FIXME: bad logic based on exceptions
+				} catch(IllegalAccessException e) {
+					Log.writeError("Bad handler for " + packageClass.getCanonicalName());
+				}
+
+			}
+			if (!handled) {
+				Log.writeError("Unhandled packet " + packageClass.getCanonicalName());
+			}
+			
 		} catch (InvalidProtocolBufferException | NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+			Log.writeError("Bad packet");
 		}
 	}
 }

@@ -15,6 +15,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
+import ru.kt15.finomen.neerc.core.LocaleManager;
+import ru.kt15.finomen.neerc.core.Localized;
+
 public class TaskStateChange extends Dialog implements Localized {
 
 	protected Object result;

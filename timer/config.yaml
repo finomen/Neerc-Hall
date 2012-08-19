@@ -1,0 +1,10 @@
+network:
+  ServerHost: 127.0.0.1
+  ServerPort: 7777
+timeFormat:
+  "10": XX:XX
+  "5":  X
+colorScheme:
+  "5:00:00": Salmon
+backgrounds:
+  "5:00:00": resources/background.jpg

@@ -11,6 +11,9 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import ru.kt15.finomen.neerc.core.LocaleManager;
+import ru.kt15.finomen.neerc.core.Localized;
+
 public class MainWindow implements Localized {
 
 	protected Shell shell;

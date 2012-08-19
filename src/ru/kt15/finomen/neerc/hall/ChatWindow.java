@@ -13,6 +13,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import ru.kt15.finomen.neerc.core.LocaleManager;
+import ru.kt15.finomen.neerc.core.Localized;
 import swing2swt.layout.BorderLayout;
 
 public class ChatWindow extends Composite implements Localized, ChatListener {

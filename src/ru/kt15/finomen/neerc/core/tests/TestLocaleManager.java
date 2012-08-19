@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc.hall.tests;
+package ru.kt15.finomen.neerc.core.tests;
 
 import static org.junit.Assert.*;
 
@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import ru.kt15.finomen.neerc.hall.LocaleManager;
-import ru.kt15.finomen.neerc.hall.LocaleManager.Locale;
+import ru.kt15.finomen.neerc.core.LocaleManager;
+import ru.kt15.finomen.neerc.core.LocaleManager.Locale;
 
 public class TestLocaleManager {
 
