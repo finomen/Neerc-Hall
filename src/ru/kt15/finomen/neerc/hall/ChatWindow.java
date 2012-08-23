@@ -43,7 +43,9 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 		setLayout(gridLayout);	
 		
 		grpUsers = new Group(this, SWT.NONE);
-		grpUsers.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		GridData gd_grpUsers = new GridData(GridData.FILL_VERTICAL);
+		gd_grpUsers.widthHint = 138;
+		grpUsers.setLayoutData(gd_grpUsers);
 		grpUsers.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		users = new List(grpUsers, SWT.BORDER);
