@@ -156,8 +156,11 @@ public class TaskWindow extends Composite implements TaskListener, Localized {
 						Task t = new Task(tm, 1, "Task1", new Date(), pls, pst);
 						addTask(t);
 						Task.TaskPerformer[] pls1 = {new TaskPerformer("self1"), new TaskPerformer("other1")};
+						Map<TaskPerformer, TaskState> state = new HashMap<Task.TaskPerformer, Task.TaskState>();
+						state.put(pls1[0], TaskState.assigned());
+						state.put(pls1[1], TaskState.done());
 						Task.TaskState.StateId[] pst1 = {Task.TaskState.StateId.ASSIGNED, Task.TaskState.StateId.DONE, Task.TaskState.StateId.FAILED};
-						t = new Task(tm, 2, "Task2", new Date(), pls1, pst1);
+						t = new Task(tm, 2, "Task2", new Date(), pls1, pst1, state);
 						System.out.println("UPD1");
 						addTask(t);
 					} catch (InterruptedException e) {
