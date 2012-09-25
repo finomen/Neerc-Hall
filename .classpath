@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="protobuf-java-2.3.0.jar"/>
 	<classpathentry kind="lib" path="commons-collections-3.2.1-javadoc.jar"/>
 	<classpathentry kind="lib" path="commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="pcms2-services.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

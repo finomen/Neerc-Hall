@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({TestNetProtobufConnection.class, TestLocaleManager.class})
+@SuiteClasses({TestLocaleManager.class})
 public class AllTests {
 
 }

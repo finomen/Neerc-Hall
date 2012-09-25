@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -19,18 +18,13 @@ import org.yaml.snakeyaml.Yaml;
 
 import ru.kt15.finomen.neerc.core.Log;
 import ru.kt15.finomen.neerc.core.SynchronizedTime;
-import ru.kt15.finomen.neerc.core.net.Endpoint;
-import ru.kt15.finomen.neerc.core.net.TCPServerConnection;
-import ru.kt15.finomen.neerc.core.net.proto.PCMS;
-import ru.kt15.finomen.neerc.core.net.proto.PCMS.TimerStatus;
+
 
 public class TimerWindow {
 	private final Shell shell;
-	private final TCPServerConnection connection;
 	private long duration;
 	private long remaining;
-	private TimerStatus status;
-	private boolean frozen;
+	private TimerStatus status; 
 	private final SynchronizedTime time;
 	private final Map<String, String> colors;
 	private final Map<String, String> backgrounds;
@@ -48,9 +42,6 @@ public class TimerWindow {
 		colorMap = (Map<String, Object>) yaml.load(new FileReader(new File("timer/colors.yaml")));
 		Log.writeInfo("All files loaded, starting...");
 		
-		connection = new TCPServerConnection(
-				(String) network.get("ServerHost"),
-				(Integer) network.get("ServerPort"));
 		
 		colors = (Map<String, String>)data.get("colorScheme");
 		timeFmt = (Map<String, String>)data.get("timeFormat");
@@ -58,19 +49,11 @@ public class TimerWindow {
 		
 		duration = 5 * 60 * 60 * 1000;
 		remaining = duration;
-		status = PCMS.TimerStatus.BEFORE;
-		frozen = false;
+		status = TimerStatus.BEFORE;
 		time = new SynchronizedTime(remaining, false);//true);
 		
 		shell = new Shell();
-		
-		connection.AddHandler(this);
-		connection.sendTo(
-				new Endpoint("PCMS"),
-				PCMS.RegisterListener.newBuilder().setInterval(500)
-						.addEvents(PCMS.EventType.TIMER_UPDATE).build());
-		
-		
+			
 		new Thread(new Runnable() {
 			
 			@Override
@@ -108,7 +91,7 @@ public class TimerWindow {
 		return res;
 	}
 
-	public void HandlePacket(final PCMS.TimerUpdate upd) {
+	/*public void HandlePacket() {
 		shell.getDisplay().asyncExec(new Runnable() {@Override
 		public void run() {
 			duration = upd.getContestDuration();
@@ -125,7 +108,7 @@ public class TimerWindow {
 		}
 		});
 		
-	}
+	}*/
 
 	/**
 	 * Launch the application.
