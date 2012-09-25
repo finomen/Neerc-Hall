@@ -13,7 +13,7 @@ public abstract class Log {
 	}
 	
 	public static void writeDebug(String s) {
-		logImpl.writeError(new Date(), s);
+		logImpl.writeDebug(new Date(), s);
 	}
 	
 	public static void setImpl(Log impl) {

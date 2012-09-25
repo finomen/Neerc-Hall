@@ -27,6 +27,7 @@ public class TimerWindow {
 	private TimerStatus status; 
 	private final SynchronizedTime time;
 	private final Map<String, String> colors;
+	private final Map<String, String> fonts;
 	private final Map<String, String> backgrounds;
 	private final Map<String, String> timeFmt;
 	private final Map<String, Object> colorMap;
@@ -44,8 +45,9 @@ public class TimerWindow {
 		
 		
 		colors = (Map<String, String>)data.get("colorScheme");
+		fonts = (Map<String, String>)data.get("fontScheme");
 		timeFmt = (Map<String, String>)data.get("timeFormat");
-		backgrounds = (Map<String, String>)data.get("timeFormat");
+		backgrounds = (Map<String, String>)data.get("backgrounds");
 		
 		duration = 5 * 60 * 60 * 1000;
 		remaining = duration;
@@ -63,7 +65,7 @@ public class TimerWindow {
 						return;
 					shell.getDisplay().asyncExec(new Runnable() {@Override
 						public void run() {
-								updateBackground();
+							repaint();
 						}
 					});
 					
@@ -88,27 +90,28 @@ public class TimerWindow {
 			res += Integer.parseInt(part);
 		}
 		
+		
+		
 		return res;
 	}
-
-	/*public void HandlePacket() {
+	
+	public void Sync(final TimerStatus Status, final long Duration, final long Remaining) {
 		shell.getDisplay().asyncExec(new Runnable() {@Override
-		public void run() {
-			duration = upd.getContestDuration();
-			remaining = upd.getRemainingTime(); //TODO: smart clock
-			status = upd.getStatus();
-						
-			if (status != TimerStatus.RUNNING) {
-				time.freeze();
-			} else {
-				time.resume();
+			public void run() {
+				duration = Duration;
+				remaining = Remaining; //TODO: smart clock
+				status = Status;
+							
+				if (status != TimerStatus.RUNNING) {
+					time.freeze();
+				} else {
+					time.resume();
+				}
+				
+				time.sync(remaining);
 			}
-			
-			time.sync(remaining);
-		}
 		});
-		
-	}*/
+	}
 
 	/**
 	 * Launch the application.
@@ -123,70 +126,88 @@ public class TimerWindow {
 			e.printStackTrace();
 		}
 	}
-
-	public void updateBackground() {
-		long cTime = time.get() / 1000;
-		String timeFmt = "H:MM:SS";
-		
-		for (String key : this.timeFmt.keySet()) {
+	
+	private String getNearest(Map<String, String> map, long cTime, String def) {
+		String result = def;
+		for (String key : map.keySet()) {
 			if (strToTime(key) < cTime) {
 				break;
 			}
 			
-			timeFmt = this.timeFmt.get(key);
+			result = map.get(key);
 		}
 		
-		String background = "resources/background.jpg";
-		for (String key : this.backgrounds.keySet()) {
-			if (strToTime(key) < cTime) {
-				break;
-			}
-			
-			background = this.backgrounds.get(key);
-		}
-
-		String color = "Salmon";
-		for (String key : this.colors.keySet()) {
-			if (strToTime(key) < cTime) {
-				break;
-			}
-			
-			color = this.colors.get(key);
-		}
-
-		Object[] colorDef = null;
-		if (colorMap.containsKey(color))
-			colorDef = ((ArrayList<?>) colorMap.get(color)).toArray();
-		else {
-			colorDef = new Object[3];
-			colorDef[0] = Integer.parseInt(color.substring(0, 2), 16);
-			colorDef[1] = Integer.parseInt(color.substring(2, 4), 16);
-			colorDef[2] = Integer.parseInt(color.substring(4, 6), 16);
-		}
+		return result;
+	}
+	
+	private String currentTimeFmt = null;
+	private String currentBackground = null;
+	private String currentColor = null;
+	private String currentFont = null;
+	private Color fontColor = null;
+	private int textLeft = 0;
+	private int textTop = 0;
+	private Font font = null;
+	private String lastTimeString = "";
+	
+	private String formatTime(long cTime, String timeFmt) {
+		String[] tfParts = timeFmt.split(":");
+		String[] tfMask = {"", "%d", "%02d"};
+		String text = "";
+		String delim = "";
 		
-		Color fontColor = new Color(shell.getDisplay(), (Integer)colorDef[0], (Integer)colorDef[1], (Integer)colorDef[2]);
-				
 		long hours = cTime / 3600;
 		cTime %= 3600;
 		long minutes = cTime / 60;
 		cTime %= 60;
 		long seconds = cTime;
+		
+		for (String part : tfParts) {
+			long val = 0;
+			switch(part.charAt(0)) {
+			case 'H':
+				val = hours;
+				break;
+			case 'M':
+				val = minutes;
+				break;
+			case 'S':
+				val = seconds;
+				break;
+			}
+			
+			text = text + delim + String.format(tfMask[part.length()], val);
+			delim = ":";
+		}
+		
+		return text;
+	}
 
-		String[] tfParts = timeFmt.split(":");
-		timeFmt = "%d:%02d:%02d";
+	private void repaint() {
+		long cTime = time.get() / 1000;
+		String timeFmt = getNearest(this.timeFmt, cTime, "H:MM:SS");		
+		String background = getNearest(this.backgrounds, cTime, "resources/background.jpg");
+		String color = getNearest(this.colors, cTime, "Salmon");
+		String font = getNearest(this.fonts, cTime, "Calibri");
 		
-		if (tfParts.length == 3) {
-			String[] tfMask = {"", "%d", "%02d"};
-			timeFmt = tfMask[tfParts[0].length()] + ":" + tfMask[tfParts[1].length()] + ":" + tfMask[tfParts[2].length()]; 
-		} else if (tfParts.length == 3) {
-			String[] tfMask = {"", "%d", "%02d"};
-			timeFmt = tfMask[tfParts[0].length()] + ":" + tfMask[tfParts[1].length()]; 
-		}else if (tfParts.length == 3) {
-			String[] tfMask = {"", "%d", "%02d"};
-			timeFmt = tfMask[tfParts[0].length()]; 
-		} 
+		boolean layoutValid = true;
+		layoutValid &= timeFmt.equals(currentTimeFmt);
+		layoutValid &= background.equals(currentBackground);
+		layoutValid &= color.equals(currentColor);
+		layoutValid &= font.equals(currentFont);
 		
-		String text = String.format(timeFmt, hours, minutes, seconds);
+		if (!layoutValid) {
+			rearrange();
+		} else {
+			String newTimeString = formatTime(cTime, currentTimeFmt);
+			if (newTimeString.length() != lastTimeString.length()) {
+				rearrange();
+			}
+			
+			lastTimeString = newTimeString;
+		}
+		
+		
 		
 		
 		int width = shell.getBounds().width;
@@ -198,20 +219,60 @@ public class TimerWindow {
 		gc.setInterpolation(SWT.HIGH);
 		gc.drawImage(back, 0, 0, back.getBounds().width,
 				back.getBounds().height, 0, 0, width, height);
+		gc.setTextAntialias(SWT.ON);
+		gc.setForeground(fontColor);
+		gc.setFont(this.font);
+		gc.drawText(lastTimeString, textLeft, textTop,
+				SWT.DRAW_TRANSPARENT);
+		gc.dispose();
+		back.dispose(); // don't forget about me!
+		shell.setBackgroundImage(scaled);
+		
+	}
+	
+	private void rearrange() {
+		long cTime = time.get() / 1000;
+		String timeFmt = currentTimeFmt = getNearest(this.timeFmt, cTime, "H:MM:SS");		
+		currentBackground = getNearest(this.backgrounds, cTime, "resources/background.jpg");
+		String color = currentColor = getNearest(this.colors, cTime, "Salmon");
+		String font = currentFont = getNearest(this.fonts, cTime, "Calibri");
+
+		Object[] colorDef = null;
+		if (colorMap.containsKey(color))
+			colorDef = ((ArrayList<?>) colorMap.get(color)).toArray();
+		else {
+			colorDef = new Object[3];
+			colorDef[0] = Integer.parseInt(color.substring(0, 2), 16);
+			colorDef[1] = Integer.parseInt(color.substring(2, 4), 16);
+			colorDef[2] = Integer.parseInt(color.substring(4, 6), 16);
+		}
+		
+		fontColor = new Color(shell.getDisplay(), (Integer)colorDef[0], (Integer)colorDef[1], (Integer)colorDef[2]);
+				
+		int width = shell.getBounds().width;
+		int height = shell.getBounds().height;
+
+		Image scaled = new Image(Display.getDefault(), width, height);
+		GC gc = new GC(scaled);
 
 		int fontSize = height;
 		int step = height / 2;
 		int widthOverflow = 0;
-		width -= 10;
+		width -= 30;
+		
+		String timeStr = formatTime(cTime, timeFmt);
+		
+		Log.writeDebug("Rearrange on " + timeStr);
 
 		do {
-			shell.getDisplay().loadFont("resources/calibri.ttf");
-			Font calibri = new Font(shell.getDisplay(), "Calibri", fontSize,
+			shell.getDisplay().loadFont("resources/" + font + ".ttf");
+			Font cfont = new Font(shell.getDisplay(), font, fontSize,
 					SWT.BOLD);
-			gc.setFont(calibri);
-			Point p = gc.textExtent(text);
+			gc.setFont(cfont);
+			this.font = cfont;
+			Point p = gc.textExtent(timeStr);
 			widthOverflow = width - p.x;
-
+			
 			if (widthOverflow > 0)
 				fontSize += step;
 			else if (widthOverflow < 0)
@@ -221,16 +282,12 @@ public class TimerWindow {
 			step /= 2;
 		} while (step > 0);
 
-		Point p = gc.textExtent(text);
-
-		gc.setTextAntialias(SWT.ON);
-		gc.setForeground(fontColor);
-		gc.drawText(text, (width - p.x) / 2, (height - p.y) / 2,
-				SWT.DRAW_TRANSPARENT);
-		gc.dispose();
-		back.dispose(); // don't forget about me!
-		shell.setBackgroundImage(scaled);
-
+		Point p = gc.textExtent(timeStr);
+		
+		Log.writeDebug("Text width: " + p.x + " of " + shell.getBounds().width);
+		
+		textLeft = (shell.getBounds().width - p.x) / 2;
+		textTop = (shell.getBounds().height - p.y) / 2;
 	}
 
 	/**
@@ -242,7 +299,7 @@ public class TimerWindow {
 		shell.open();
 		shell.layout();
 		shell.setFullScreen(true);
-		updateBackground();
+		repaint();
 
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
