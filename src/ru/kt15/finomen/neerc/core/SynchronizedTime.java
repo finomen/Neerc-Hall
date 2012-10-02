@@ -22,9 +22,10 @@ public class SynchronizedTime {
 	
 	public void sync(long time) {
 		long ct = System.currentTimeMillis();
-		long diff = ct - get();
-			correction += diff;
-		sync = ct;
+		long diff = time - get();
+		correction += diff;
+		//sync = ct;
+		//Log.writeDebug("SYNC " + time + " " + sync + " " + diff + " " + cTime + " = " + get());
 	}
 
 	public void freeze() {

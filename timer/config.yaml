@@ -11,3 +11,6 @@ fontScheme:
   "5:00:00": Alien Encounters
 backgrounds:
   "5:00:00": resources/background.jpg
+network:
+  udp-port: 6767
+  multicast-group: 225.0.0.1

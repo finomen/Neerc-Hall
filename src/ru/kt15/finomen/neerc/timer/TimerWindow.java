@@ -3,6 +3,7 @@ package ru.kt15.finomen.neerc.timer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -31,9 +32,10 @@ public class TimerWindow {
 	private final Map<String, String> backgrounds;
 	private final Map<String, String> timeFmt;
 	private final Map<String, Object> colorMap;
+	private final TimerSocket socket;
 	
 	@SuppressWarnings("unchecked")
-	TimerWindow() throws FileNotFoundException {
+	TimerWindow() throws IOException {
 		Yaml yaml = new Yaml();
 		Log.writeInfo("Loading config...");
 		Map<String, Object> data = (Map<String, Object>) yaml
@@ -48,7 +50,7 @@ public class TimerWindow {
 		fonts = (Map<String, String>)data.get("fontScheme");
 		timeFmt = (Map<String, String>)data.get("timeFormat");
 		backgrounds = (Map<String, String>)data.get("backgrounds");
-		
+				
 		duration = 5 * 60 * 60 * 1000;
 		remaining = duration;
 		status = TimerStatus.BEFORE;
@@ -79,6 +81,8 @@ public class TimerWindow {
 				}
 			}
 		}).start();
+		
+		socket = new TimerSocket(this, (Map<String, Object>)data.get("network"));
 	}
 	
 	private long strToTime(String s) {
@@ -258,7 +262,9 @@ public class TimerWindow {
 		int fontSize = height;
 		int step = height / 2;
 		int widthOverflow = 0;
+		int heightOverflow = 0;
 		width -= 30;
+		height -= 30;
 		
 		String timeStr = formatTime(cTime, timeFmt);
 		
@@ -272,10 +278,11 @@ public class TimerWindow {
 			this.font = cfont;
 			Point p = gc.textExtent(timeStr);
 			widthOverflow = width - p.x;
+			heightOverflow = height - p.y;
 			
-			if (widthOverflow > 0)
+			if (widthOverflow > 0 && heightOverflow > 0)
 				fontSize += step;
-			else if (widthOverflow < 0)
+			else if (widthOverflow < 0 || heightOverflow < 0)
 				fontSize -= step;
 			else
 				break;
@@ -285,9 +292,10 @@ public class TimerWindow {
 		Point p = gc.textExtent(timeStr);
 		
 		Log.writeDebug("Text width: " + p.x + " of " + shell.getBounds().width);
+		Log.writeDebug("Text height: " + p.y + " of " + shell.getBounds().height);
 		
 		textLeft = (shell.getBounds().width - p.x) / 2;
-		textTop = (shell.getBounds().height - p.y) / 2;
+		textTop = (shell.getBounds().height - p.y) / 2 + 30;
 	}
 
 	/**
