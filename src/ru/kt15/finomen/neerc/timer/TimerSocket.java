@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
+import java.net.SocketAddress;
 import java.net.StandardProtocolFamily;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
@@ -11,8 +12,10 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.MembershipKey;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import ru.kt15.finomen.neerc.core.Log;
 
@@ -20,7 +23,9 @@ public class TimerSocket implements Runnable {
 	private final TimerWindow window;
 	private final DatagramChannel channel;
 	private final List<MembershipKey> memberKey;
-	private final Thread worker;
+	private final Thread worker, watch;
+	private final SocketAddress server;
+	private AtomicLong lastSync;
 	
 	public TimerSocket(TimerWindow wnd, Map<String, Object> config) throws IOException {
 		this.window = wnd;
@@ -45,8 +50,49 @@ public class TimerSocket implements Runnable {
 			}
 		}
 		
+		if (config.containsKey("server-host")) {
+			server = new InetSocketAddress((String)config.get("server-host"), (Integer)config.get("server-port"));
+		} else {
+			server = null;
+		}
+		
 		worker = new Thread(this);
 		worker.start();
+		lastSync = new AtomicLong(new Date().getTime());
+		
+		watch = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while (true) {
+					long cTime = new Date().getTime();
+					long lSync = lastSync.get();
+					if (cTime - lSync > 1000) {
+						ByteBuffer buf = ByteBuffer.allocate(1);
+						buf.put((byte) 0x01);
+						buf.flip();
+						try {
+							Log.writeInfo("Register as unicast client");
+							channel.send(buf, server);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					
+					synchronized (this) {
+						try {
+							wait(5000);
+						} catch (InterruptedException e) {
+							return;
+						}
+					}
+				}
+			}
+		});
+		
+		if (server != null) {
+			watch.start();
+		}
 	}
 
 	@Override
@@ -63,6 +109,8 @@ public class TimerSocket implements Runnable {
 					long time = buf.getLong();
 					long duration = buf.getLong();
 					window.Sync(TimerStatus.getById(status), duration, duration - time);
+					Log.writeInfo("SYNC");
+					lastSync.set(new Date().getTime());
 					break;
 				}
 			} catch (IOException e) {

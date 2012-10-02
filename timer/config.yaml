@@ -13,4 +13,6 @@ backgrounds:
   "5:00:00": resources/background.jpg
 network:
   udp-port: 6767
-  multicast-group: 225.0.0.1
+  disabled-multicast-group: 225.0.0.1
+  server-host: 127.0.0.1
+  server-port: 6768
