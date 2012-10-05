@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="swt.jar" sourcepath="src.zip"/>
 	<classpathentry kind="lib" path="swing2swt.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="snakeyaml-1.10-javadoc.jar"/>
@@ -13,6 +12,6 @@
 	<classpathentry kind="lib" path="protobuf-java-2.3.0.jar"/>
 	<classpathentry kind="lib" path="commons-collections-3.2.1-javadoc.jar"/>
 	<classpathentry kind="lib" path="commons-collections-3.2.1.jar"/>
-	<classpathentry kind="lib" path="pcms2-services.jar"/>
+	<classpathentry kind="lib" path="/usr/share/swt-3.7/lib/swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
