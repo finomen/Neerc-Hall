@@ -1,0 +1,103 @@
+<project name="NeercSoft" default="deploy" basedir=".">
+	<property name="src" location="src" />
+	<property name="bin" location="bin" />
+
+	<path id="classpath">
+		<fileset dir="." includes="*.jar" />
+	</path>
+	
+	<path id="bin.path">
+		<pathelement location="bin/" /> 
+	</path>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${bin}" />
+	</target>
+
+	<target name="compile" depends="init" description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${bin}" classpathref="classpath" />
+	</target>
+
+	<target name="tests" depends="compile" description="run tests">
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath>
+				<pathelement location="bin/" />
+				<pathelement path="junit.jar" />
+			</classpath>
+			<classpath refid="classpath"/>
+			<formatter type="plain" />
+			<formatter type="xml" />
+			<test name="ru.kt15.finomen.neerc.AllTests"/>
+			
+		</junit>
+
+	</target>
+
+	<target name="timer_jar" depends="compile,tests" description="generate the timer distribution">
+		<jar jarfile="neerc-timer.jar" basedir="${bin}" includes="ru/kt15/finomen/neerc/timer/**">
+			<manifest>
+	            <attribute name="Main-Class" value="ru.kt15.finomen.neerc.timer.TimerWindow"/>
+				<attribute name="Class-Path" value="swt.jar snakeyaml-1.10.jar neerc-core.jar"/>
+	        </manifest>
+		</jar>
+	</target>
+	
+	<target name="core_jar" depends="compile,tests" description="generate the core distribution">
+		<jar jarfile="neerc-core.jar" basedir="${bin}" includes="ru/kt15/finomen/neerc/core/**" excludes="*/tests/*">
+		</jar>
+	</target>
+	
+	<target name="hall_jar" depends="compile,tests" description="generate the hall distribution">
+		<jar jarfile="neerc-hall.jar" basedir="${bin}" includes="ru/kt15/finomen/neerc/hall/**" excludes="*/tests/*">
+		</jar>
+	</target>
+	
+	<target name="jars" depends="core_jar,timer_jar,hall_jar" description="Make all jars">
+	</target>
+	
+	<target name="deploy" depends="jars">
+		<mkdir dir="dist-win"/>
+		<mkdir dir="dist-linux_x64"/>
+		<mkdir dir="dist-win/locale"/>
+		<mkdir dir="dist-linux_x64/locale"/>
+		<mkdir dir="dist-win/timer"/>
+		<mkdir dir="dist-linux_x64/timer"/>
+		<copy file="neerc-hall.jar" todir="dist-win"/>
+		<copy file="neerc-hall.jar" todir="dist-linux_x64"/>
+		<copy file="neerc-timer.jar" todir="dist-win"/>
+		<copy file="neerc-timer.jar" todir="dist-linux_x64"/>
+		<copy file="neerc-core.jar" todir="dist-win"/>
+		<copy file="neerc-core.jar" todir="dist-linux_x64"/>
+		<copy file="snakeyaml-1.10.jar" todir="dist-win"/>
+		<copy file="snakeyaml-1.10.jar" todir="dist-linux_x64"/>
+		<copy file="swt-win.jar" tofile="dist-win/swt.jar"/>
+		<copy file="swt-linux-x64.jar" tofile="dist-linux_x64/swt.jar"/>
+		<copy file="locale/ruRU.loc" todir="dist-win/locale/"/>
+		<copy file="locale/ruRU.loc" todir="dist-linux_x64/locale/"/>
+		<copy file="locale/enGB.loc" todir="dist-win/locale/"/>
+		<copy file="locale/enGB.loc" todir="dist-linux_x64/locale/"/>
+		<copy file="timer/config.yaml" todir="dist-win/timer/"/>
+		<copy file="timer/config.yaml" todir="dist-linux_x64/timer/"/>
+		<copy file="timer/colors.yaml" todir="dist-win/timer/"/>
+		<copy file="timer/colors.yaml" todir="dist-linux_x64/timer/"/>
+		<copy todir="dist-win/resources">
+			<fileset dir="resources"/>
+		</copy>
+		<copy todir="dist-linux_x64/resources">
+			<fileset dir="resources"/>
+		</copy>
+	</target>
+
+	<target name="clean" description="clean up">
+		<delete dir="${bin}" />
+		<delete file="neerc-timer.jar"/>
+		<delete file="neerc-core.jar"/>
+		<delete file="neerc-hall.jar"/>
+		<delete file="TEST-ru.kt15.finomen.neerc.AllTests.txt"/>
+		<delete file="TEST-ru.kt15.finomen.neerc.AllTests.xml"/>
+	</target>
+</project>

@@ -1,30 +1,30 @@
-name: Русский
+name: Р СѓСЃСЃРєРёР№
 dictionary:
-  CurrentLocaleName: Русский
-  Neerc hall console: Neerc панель холла
-  Tasks: Задания
-  Language: Язык
-  Help: Справка
-  About: О программе
-  ID: Ид
-  Time: Время
-  Text: Задание
-  Active tasks: Активные задания
-  History: История
-  State: Статус
-  Assigned: Назначено
-  In progress: В процессе
-  Done: Выполнено
-  Failed: Не удалось
-  Message (optional): Сообщение (опционально)
-  Save: Сохранить
-  State change: Изменить статус
-  Chat: Чат
-  Users: Пользователи
-  Send: Отправить
-  User: Пользователь
-  Message: Сообщение
-  Version: Версия
+  CurrentLocaleName: Р СѓСЃСЃРєРёР№
+  Neerc hall console: Neerc РїР°РЅРµР»СЊ С…РѕР»Р»Р°
+  Tasks: Р—Р°РґР°РЅРёСЏ
+  Language: РЇР·С‹Рє
+  Help: РЎРїСЂР°РІРєР°
+  About: Рћ РїСЂРѕРіСЂР°РјРјРµ
+  ID: РРґ
+  Time: Р’СЂРµРјСЏ
+  Text: Р—Р°РґР°РЅРёРµ
+  Active tasks: РђРєС‚РёРІРЅС‹Рµ Р·Р°РґР°РЅРёСЏ
+  History: РСЃС‚РѕСЂРёСЏ
+  State: РЎС‚Р°С‚СѓСЃ
+  Assigned: РќР°Р·РЅР°С‡РµРЅРѕ
+  In progress: Р’ РїСЂРѕС†РµСЃСЃРµ
+  Done: Р’С‹РїРѕР»РЅРµРЅРѕ
+  Failed: РќРµ СѓРґР°Р»РѕСЃСЊ
+  Message (optional): РЎРѕРѕР±С‰РµРЅРёРµ (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ)
+  Save: РЎРѕС…СЂР°РЅРёС‚СЊ
+  State change: РР·РјРµРЅРёС‚СЊ СЃС‚Р°С‚СѓСЃ
+  Chat: Р§Р°С‚
+  Users: РџРѕР»СЊР·РѕРІР°С‚РµР»Рё
+  Send: РћС‚РїСЂР°РІРёС‚СЊ
+  User: РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ
+  Message: РЎРѕРѕР±С‰РµРЅРёРµ
+  Version: Р’РµСЂСЃРёСЏ
   0.0a: null
-  Author: Автор
-  Nikolay Filchenko: Николай Фильченко
+  Author: РђРІС‚РѕСЂ
+  Nikolay Filchenko: РќРёРєРѕР»Р°Р№ Р¤РёР»СЊС‡РµРЅРєРѕ
