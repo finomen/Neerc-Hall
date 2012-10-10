@@ -31,3 +31,16 @@ dictionary:
   PCMS2 Monitor: null
   View: null
   Full screen: null
+  Filter: null
+  Team ID: null
+  Team name: null
+  Status: null
+  Contest: null
+  Contest_Name: null
+  'Status:': null
+  Contest_Status: null
+  'Time:': null
+  Contest_Time: null
+  'Last success:': null
+  Contest_Success: null
+  Monitor: null

@@ -1,11 +1,16 @@
 package ru.kt15.finomen.neerc.core;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +33,7 @@ public static class Locale {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("name", name);
 		data.put("dictionary", dictionary);
-		FileWriter writer = new FileWriter(file);
+		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 		DumperOptions options = new DumperOptions();
 		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 		Yaml yaml = new Yaml(options);
@@ -36,10 +41,10 @@ public static class Locale {
 		writer.close();
 	}
 	
-	public Locale(File file) throws FileNotFoundException {
+	public Locale(File file) throws FileNotFoundException, UnsupportedEncodingException {
 		this.file = file;
 		Yaml yaml = new Yaml();
-		Map<String, Object> data = (Map<String, Object>) yaml.load(new FileReader(file));
+		Map<String, Object> data = (Map<String, Object>) yaml.load(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 		name = (String) data.get("name");
 		dictionary = (Map<String, String>) data.get("dictionary");
 	}
@@ -74,7 +79,7 @@ public static class Locale {
 	}
 }
 
-public LocaleManager() {
+public LocaleManager() throws UnsupportedEncodingException {
 	File localeDir = new File("locale");
 	locales = new ArrayList<Locale>();
 	for (File localeFile : localeDir.listFiles(new FilenameFilter() {

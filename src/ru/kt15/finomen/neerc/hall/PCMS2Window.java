@@ -23,6 +23,19 @@ public class PCMS2Window extends Composite implements Localized {
 	private Table table;
 	private Text teamIdFilter;
 	private Text teamIdFilter_1;
+	private Label lblContest;
+	private Label lblContestname;
+	private Label lblStatus;
+	private Label lblConteststatus;
+	private Label lblTime;
+	private Label lblContesttime;
+	private Label lblLastSuccess;
+	private Label lblContestsuccess;
+	private Group grpFilter;
+	private Label lblTeamId;
+	private Label lblTeamName;
+	private Group grpStatus;
+	private Group grpMonitor;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -36,55 +49,35 @@ public class PCMS2Window extends Composite implements Localized {
 		composite.setLayoutData(BorderLayout.NORTH);
 		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		Group grpFilter = new Group(composite, SWT.NONE);
-		grpFilter.setText("Filter");
+		grpFilter = new Group(composite, SWT.NONE);
 		grpFilter.setLayout(new GridLayout(2, false));
 		
-		Label lblTeamId = new Label(grpFilter, SWT.NONE);
+		lblTeamId = new Label(grpFilter, SWT.NONE);
 		lblTeamId.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblTeamId.setText("Team ID");
 		
 		teamIdFilter = new Text(grpFilter, SWT.BORDER);
 		teamIdFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblTeamName = new Label(grpFilter, SWT.NONE);
+		lblTeamName = new Label(grpFilter, SWT.NONE);
 		lblTeamName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblTeamName.setText("Team name");
 		
 		teamIdFilter_1 = new Text(grpFilter, SWT.BORDER);
 		teamIdFilter_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Group grpStatus = new Group(composite, SWT.NONE);
-		grpStatus.setText("Status");
+		grpStatus = new Group(composite, SWT.NONE);
 		grpStatus.setLayout(new GridLayout(2, false));
 		
-		Label lblContest = new Label(grpStatus, SWT.NONE);
-		lblContest.setText("Contest");
+		lblContest = new Label(grpStatus, SWT.NONE);
+		lblContestname = new Label(grpStatus, SWT.NONE);
+		lblStatus = new Label(grpStatus, SWT.NONE);
+		lblConteststatus = new Label(grpStatus, SWT.NONE);
+		lblTime = new Label(grpStatus, SWT.NONE);
+		lblContesttime = new Label(grpStatus, SWT.NONE);
+		lblLastSuccess = new Label(grpStatus, SWT.NONE);
+		lblContestsuccess = new Label(grpStatus, SWT.NONE);
 		
-		Label lblContestname = new Label(grpStatus, SWT.NONE);
-		lblContestname.setText("Contest_Name");
-		
-		Label lblStatus = new Label(grpStatus, SWT.NONE);
-		lblStatus.setText("Status:");
-		
-		Label lblConteststatus = new Label(grpStatus, SWT.NONE);
-		lblConteststatus.setText("Contest_Status");
-		
-		Label lblTime = new Label(grpStatus, SWT.NONE);
-		lblTime.setText("Time:");
-		
-		Label lblContesttime = new Label(grpStatus, SWT.NONE);
-		lblContesttime.setText("Contest_Time");
-		
-		Label lblLastSuccess = new Label(grpStatus, SWT.NONE);
-		lblLastSuccess.setText("Last success:");
-		
-		Label lblContestsuccess = new Label(grpStatus, SWT.NONE);
-		lblContestsuccess.setText("Contest_Success");
-		
-		Group grpMonitor = new Group(this, SWT.NONE);
+		grpMonitor = new Group(this, SWT.NONE);
 		grpMonitor.setLayoutData(BorderLayout.CENTER);
-		grpMonitor.setText("Monitor");
 		grpMonitor.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		table = new Table(grpMonitor, SWT.BORDER | SWT.FULL_SELECTION);
@@ -102,7 +95,18 @@ public class PCMS2Window extends Composite implements Localized {
 
 	@Override
 	public void setLocaleStrings() {
-		// TODO Auto-generated method stub
-		
+		grpFilter.setText(localeManager.localize("Filter"));
+		lblTeamId.setText(localeManager.localize("Team ID"));
+		lblTeamName.setText(localeManager.localize("Team name"));
+		grpStatus.setText(localeManager.localize("Status"));
+		lblContest.setText(localeManager.localize("Contest"));
+		lblContestname.setText(localeManager.localize("Contest_Name"));
+		lblStatus.setText(localeManager.localize("Status:"));
+		lblConteststatus.setText(localeManager.localize("Contest_Status"));
+		lblTime.setText(localeManager.localize("Time:"));
+		lblContesttime.setText(localeManager.localize("Contest_Time"));
+		lblLastSuccess.setText(localeManager.localize("Last success:"));
+		lblContestsuccess.setText(localeManager.localize("Contest_Success"));
+		grpMonitor.setText(localeManager.localize("Monitor"));
 	}
 }

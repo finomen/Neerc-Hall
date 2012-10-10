@@ -28,3 +28,19 @@ dictionary:
   0.0a: null
   Author: Автор
   Nikolay Filchenko: Николай Фильченко
+  PCMS2 Monitor: Монитор PCMS2
+  View: Вид
+  Full screen: Полноэкранные режим
+  Filter: Фильтр
+  Team ID: Номер команды
+  Team name: Имя команлы
+  Status: Состояние
+  Contest: Контест
+  Contest_Name: null
+  'Status:': 'Статус:'
+  Contest_Status: null
+  'Time:': 'Время:'
+  Contest_Time: null
+  'Last success:': 'Последний успех:'
+  Contest_Success: null
+  Monitor: Монитор

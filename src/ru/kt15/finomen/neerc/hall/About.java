@@ -77,8 +77,7 @@ public class About extends Dialog implements Localized {
 
 	@Override
 	public boolean isDisposed() {
-		// TODO Auto-generated method stub
-		return false;
+		return shlAbout.isDisposed();
 	}
 
 }
