@@ -19,14 +19,18 @@ public class MainWindow implements Localized {
 	protected Shell shell;
 	private TaskWindow taskTab;
 	private ChatWindow chatTab;
+	private PCMS2Window pcmsTab;
 	private final LocaleManager localeManager;
 	private CTabFolder tabFolder;
 	private CTabItem tbtmTasks;
 	private CTabItem tbtmChat;
+	private CTabItem tbtmPCMS;
 	private MenuItem mntmLanguage;
 	private MenuItem mntmHelp;
 	private MenuItem mntmHelp_1;
 	private MenuItem mntmAbout;
+	private MenuItem mntmView;
+	private MenuItem mntmFullScreen;
 	
 	public MainWindow(LocaleManager localeManager) {
 		this.localeManager = localeManager;
@@ -65,10 +69,13 @@ public class MainWindow implements Localized {
 		shell.setText(localeManager.localize("Neerc hall console"));
 		tbtmTasks.setText(localeManager.localize("Tasks"));
 		tbtmChat.setText(localeManager.localize("Chat"));
+		tbtmPCMS.setText(localeManager.localize("PCMS2 Monitor"));
 		mntmLanguage.setText(localeManager.localize("Language"));
 		mntmHelp.setText(localeManager.localize("Help"));
 		mntmHelp_1.setText(localeManager.localize("Help"));
 		mntmAbout.setText(localeManager.localize("About"));
+		mntmView.setText(localeManager.localize("View"));
+		mntmFullScreen.setText(localeManager.localize("Full screen"));
 	}
 
 	/**
@@ -91,10 +98,28 @@ public class MainWindow implements Localized {
 		chatTab = new ChatWindow(localeManager, tabFolder, SWT.BORDER);
 		tbtmChat.setControl(chatTab);
 		
+		tbtmPCMS = new CTabItem(tabFolder, SWT.NONE);
+		pcmsTab = new PCMS2Window(localeManager, tabFolder, SWT.BORDER);
+		tbtmPCMS.setControl(pcmsTab);
+		
 		Menu menu = new Menu(shell, SWT.BAR);
 		shell.setMenuBar(menu);
 		
 		mntmLanguage = new MenuItem(menu, SWT.CASCADE);	
+		
+		mntmView =  new MenuItem(menu, SWT.CASCADE);
+		Menu menu_3 = new Menu(mntmLanguage);
+		mntmView.setMenu(menu_3);
+		mntmFullScreen = new MenuItem(menu_3, SWT.CHECK);
+		mntmFullScreen.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				shell.setFullScreen(mntmFullScreen.getSelection());
+			}		
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
 		
 		Menu menu_2 = new Menu(mntmLanguage);
 		mntmLanguage.setMenu(menu_2);
