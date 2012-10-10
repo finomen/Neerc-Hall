@@ -109,7 +109,6 @@ public class TimerSocket implements Runnable {
 					long time = buf.getLong();
 					long duration = buf.getLong();
 					window.Sync(TimerStatus.getById(status), duration, duration - time);
-					Log.writeInfo("SYNC");
 					lastSync.set(new Date().getTime());
 					break;
 				}

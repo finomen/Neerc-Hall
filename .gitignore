@@ -1,2 +1,5 @@
 .settings
 /bin
+/dist-*
+neerc-*.jar
+TEST-*
