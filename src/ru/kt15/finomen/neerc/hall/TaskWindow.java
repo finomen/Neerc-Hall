@@ -2,13 +2,10 @@ package ru.kt15.finomen.neerc.hall;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -23,8 +20,6 @@ import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
 import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
 import ru.kt15.finomen.neerc.hall.Task.TaskState;
-
-import org.eclipse.swt.widgets.Menu;
 
 public class TaskWindow extends Composite implements TaskListener, Localized {
 	private Table activeTasks;
@@ -123,6 +118,7 @@ public class TaskWindow extends Composite implements TaskListener, Localized {
 		tblclmnText_1 = new TableColumn(historyTasks, SWT.NONE);
 		tblclmnText_1.setWidth(100);
 		
+						
 		new StateChangeListener(getShell(), activeTasks);
 		new StateChangeListener(getShell(), historyTasks);
 		

@@ -1,5 +1,7 @@
 package ru.kt15.finomen.neerc.hall;
 
+import java.net.MalformedURLException;
+
 import org.eclipse.swt.widgets.Composite;
 
 import ru.kt15.finomen.neerc.core.LocaleManager;
@@ -17,6 +19,14 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.GridData;
+
+import com.caucho.hessian.client.HessianProxyFactory;
+
+import pcms2.services.client.AuthorizationFailedException;
+import pcms2.services.client.ClientStandingsService;
+import pcms2.services.client.LoginDataService;
+import pcms2.services.client.TransportStandings;
+import pcms2.services.scoring.Standings;
 
 public class PCMS2Window extends Composite implements Localized {
 	private LocaleManager localeManager;
@@ -36,6 +46,7 @@ public class PCMS2Window extends Composite implements Localized {
 	private Label lblTeamName;
 	private Group grpStatus;
 	private Group grpMonitor;
+	private Thread worker;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -83,9 +94,56 @@ public class PCMS2Window extends Composite implements Localized {
 		table = new Table(grpMonitor, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		int[] mask = {20, 200, 0};
+		new TableResizer(table, mask);
 				
 		localeManager = lm;
-		localeManager.addLocalizedObject(this);
+		localeManager.addLocalizedObject(this);		
+		
+		worker = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					HessianProxyFactory factory = new HessianProxyFactory();
+					factory.setConnectTimeout(2000);
+					ClientStandingsService standingsService = 
+							(ClientStandingsService) factory.create(ClientStandingsService.class, "http://127.0.0.1:8080/pcms/party");
+					
+					TransportStandings standings = standingsService.getStandings("guest", "guest");
+					
+					final String lastSuccess = standings.lastAcceptedParty + " " +
+							standings.lastAcceptedProblem + " " +
+							standings.lastAcceptedTime;
+					
+					final String contestName = standings.contestName;
+					long time = standings.contestLength - standings.timePassed;
+					
+					final String timeStr = 
+							String.format("%d:%02d:%02d", 
+									time / 3600,
+									(time / 60) % 60,
+									time % 60);
+					
+					getShell().getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							lblContestsuccess.setText(lastSuccess);
+							lblContestname.setText(contestName);
+							lblContesttime.setText(timeStr);
+						}
+					});
+					
+					
+					
+				} catch (MalformedURLException | AuthorizationFailedException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		
+		worker.start();
 	}
 
 	@Override
