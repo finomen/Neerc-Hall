@@ -100,7 +100,7 @@ public class MainWindow implements Localized {
 		tbtmTasks.setControl(taskTab);
 		
 		tbtmChat = new CTabItem(tabFolder, SWT.NONE);
-		chatTab = new ChatWindow(localeManager, tabFolder, SWT.BORDER);
+		chatTab = new ChatWindow(chatManager, localeManager, tabFolder, SWT.BORDER);
 		chatManager.addListener(chatTab);
 		tbtmChat.setControl(chatTab);
 		

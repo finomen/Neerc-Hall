@@ -6,8 +6,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -17,6 +19,7 @@ import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
 import ru.kt15.finomen.neerc.core.Log;
 import ru.kt15.finomen.neerc.hall.ChatListener;
+import ru.kt15.finomen.neerc.hall.ChatManager;
 import ru.kt15.finomen.neerc.hall.Message;
 import ru.kt15.finomen.neerc.hall.UserInfo;
 import swing2swt.layout.BorderLayout;
@@ -32,14 +35,16 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 	private TableColumn tblclmnMessage;
 	private List users;
 	private Composite composite;
+	private final ChatManager chatManager;
 	/**
 	 * Create the composite.
 	 * @param localeManager 
 	 * @param parent
 	 * @param style
 	 */
-	public ChatWindow(LocaleManager localeManager, Composite parent, int style) {
+	public ChatWindow(ChatManager chatMgr, LocaleManager localeManager, Composite parent, int style) {
 		super(parent, style);
+		chatManager = chatMgr;
 		this.localeManager = localeManager;
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 2;
@@ -85,6 +90,17 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 		
 		btnSend = new Button(composite, SWT.NONE);
 		btnSend.setLayoutData(BorderLayout.EAST);
+		
+		btnSend.addListener(SWT.MouseUp, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				Message msg = new Message();
+				msg.text = text.getText();
+				text.setText("");
+				chatManager.sendMessage(msg);
+			}
+			
+		});
 		
 		localeManager.addLocalizedObject(this);
 	}

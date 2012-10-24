@@ -8,6 +8,7 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.AndFilter;
 import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
@@ -23,7 +24,7 @@ public class XMPPChatManager implements ChatManager, Runnable {
 	private ConnectionConfiguration connConfig;
 	private XMPPConnection connection;
 	private Thread worker;
-	private MultiUserChat muc;
+	private MultiUserChat conference;
 
 	public XMPPChatManager() {
 		listeners = new HashSet<ChatListener>();
@@ -44,7 +45,12 @@ public class XMPPChatManager implements ChatManager, Runnable {
 
 	@Override
 	public void sendMessage(Message message) {
-		// TODO Auto-generated method stub
+		try {
+			conference.sendMessage(message.text);
+		} catch (XMPPException e) {
+			Log.writeError(e.getLocalizedMessage());
+		}
+		
 	}
 
 	@Override
@@ -65,8 +71,8 @@ public class XMPPChatManager implements ChatManager, Runnable {
 				//connection.sendPacket(presence);
 				//presence.setPriority(priority);
 				
-				muc = new MultiUserChat(connection, "neerc@conference.finomen.kt15.ru");
-				muc.join("test");
+				conference = new MultiUserChat(connection, "neerc@conference.finomen.kt15.ru");
+				conference.join("test");
 				
 				//PacketFilter filter = new AndFilter(new PacketTypeFilter(
 				//		org.jivesoftware.smack.packet.Message.class));
@@ -80,7 +86,7 @@ public class XMPPChatManager implements ChatManager, Runnable {
 					}
 				};
 				
-				muc.addMessageListener(myListener);
+				conference.addMessageListener(myListener);
 
 				//connection.addPacketListener(myListener, filter);
 
