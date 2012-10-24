@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc.hall;
+package ru.kt15.finomen.neerc.hall.desktop;
 
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -17,6 +17,9 @@ import org.eclipse.swt.events.SelectionEvent;
 
 import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
+import ru.kt15.finomen.neerc.hall.Task;
+import ru.kt15.finomen.neerc.hall.Task.TaskState;
+import ru.kt15.finomen.neerc.hall.Task.TaskState.StateId;
 
 public class TaskStateChange extends Dialog implements Localized {
 

@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc.hall;
+package ru.kt15.finomen.neerc.hall.desktop;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -13,6 +13,8 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
+import ru.kt15.finomen.neerc.hall.ChatManager;
+import ru.kt15.finomen.neerc.hall.XMPPChatManager;
 
 public class MainWindow implements Localized {
 
@@ -31,6 +33,9 @@ public class MainWindow implements Localized {
 	private MenuItem mntmAbout;
 	private MenuItem mntmView;
 	private MenuItem mntmFullScreen;
+	
+	//Managers
+	private final ChatManager chatManager = new XMPPChatManager();
 	
 	public MainWindow(LocaleManager localeManager) {
 		this.localeManager = localeManager;
@@ -96,6 +101,7 @@ public class MainWindow implements Localized {
 		
 		tbtmChat = new CTabItem(tabFolder, SWT.NONE);
 		chatTab = new ChatWindow(localeManager, tabFolder, SWT.BORDER);
+		chatManager.addListener(chatTab);
 		tbtmChat.setControl(chatTab);
 		
 		tbtmPCMS = new CTabItem(tabFolder, SWT.NONE);
@@ -169,6 +175,9 @@ public class MainWindow implements Localized {
 		});
 				
 		localeManager.addLocalizedObject(this);
+		
+		
+		chatManager.Start();
 	}
 
 	@Override

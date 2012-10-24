@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc.hall;
+package ru.kt15.finomen.neerc.hall.desktop;
 
 import java.net.MalformedURLException;
 

@@ -4,4 +4,5 @@ public interface ChatManager {
 	public void addListener(ChatListener listener);
 	public void sendMessage(Message message);
 	public UserInfo getSelf();
+	public void Start();
 }

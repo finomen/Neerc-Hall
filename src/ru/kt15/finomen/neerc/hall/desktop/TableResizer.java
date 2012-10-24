@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc.hall;
+package ru.kt15.finomen.neerc.hall.desktop;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;

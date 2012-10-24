@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc.hall;
+package ru.kt15.finomen.neerc.hall.desktop;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -15,6 +15,10 @@ import org.eclipse.swt.widgets.Text;
 
 import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
+import ru.kt15.finomen.neerc.core.Log;
+import ru.kt15.finomen.neerc.hall.ChatListener;
+import ru.kt15.finomen.neerc.hall.Message;
+import ru.kt15.finomen.neerc.hall.UserInfo;
 import swing2swt.layout.BorderLayout;
 
 public class ChatWindow extends Composite implements Localized, ChatListener {
@@ -55,6 +59,7 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		table.setLinesVisible(false);
 		
 		tblclmnTime = new TableColumn(table, SWT.NONE);
 		tblclmnTime.setWidth(100);
@@ -117,10 +122,16 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 	}
 
 	@Override
-	public void newMessgae(Message message) {
-		TableItem item = new TableItem(table, SWT.None);
-		item.setText(0, message.time.toString());
-		item.setText(1, message.fromName);
-		item.setText(2, message.text);
+	public void newMessgae(final Message message) {
+		getDisplay().asyncExec(new Runnable(){
+			@Override
+			public void run() {
+				TableItem item = new TableItem(table, SWT.NONE);
+				item.setText(0, message.time.toString());
+				item.setText(1, message.fromName);
+				item.setText(2, message.text);
+			}
+			
+		});
 	}
 }
