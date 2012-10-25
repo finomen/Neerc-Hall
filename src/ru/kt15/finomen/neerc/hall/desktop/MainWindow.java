@@ -105,8 +105,8 @@ public class MainWindow implements Localized {
 		tbtmChat.setControl(chatTab);
 		
 		tbtmPCMS = new CTabItem(tabFolder, SWT.NONE);
-		pcmsTab = new PCMS2Window(localeManager, tabFolder, SWT.BORDER);
-		tbtmPCMS.setControl(pcmsTab);
+		//pcmsTab = new PCMS2Window(localeManager, tabFolder, SWT.BORDER);
+		//tbtmPCMS.setControl(pcmsTab);
 		
 		Menu menu = new Menu(shell, SWT.BAR);
 		shell.setMenuBar(menu);

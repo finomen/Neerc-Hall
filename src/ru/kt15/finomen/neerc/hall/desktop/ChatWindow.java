@@ -1,5 +1,8 @@
 package ru.kt15.finomen.neerc.hall.desktop;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -35,6 +38,7 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 	private TableColumn tblclmnMessage;
 	private List users;
 	private Composite composite;
+	private Map<String, UserInfo> chatMembers;
 	private final ChatManager chatManager;
 	/**
 	 * Create the composite.
@@ -58,7 +62,6 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 		grpUsers.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		users = new List(grpUsers, SWT.BORDER);
-		users.setItems(new String[] {"user1", "user2", "suer23123123"});
 		
 		table = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -102,6 +105,8 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 			
 		});
 		
+		chatMembers = new HashMap<String, UserInfo>();
+		
 		localeManager.addLocalizedObject(this);
 	}
 
@@ -120,21 +125,37 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 		this.layout();
 		composite.layout();
 	}
+	
+	private void displayUsers() {
+		System.out.println("DisplayUsers");
+		getDisplay().asyncExec(new Runnable(){
+			@Override
+			public void run() {
+				users.removeAll();
+				for (UserInfo ui : chatMembers.values()) {
+					users.add(ui.name);
+				}
+			}
+		});
+	}
 
 	@Override
 	public void addUser(UserInfo info) {
-		//TODO:
+		System.out.println("Add user " + info.id);
+		chatMembers.put(info.id, info);
+		displayUsers();
 	}
 
 	@Override
 	public void updateUser(UserInfo info) {
-		// TODO Auto-generated method stub
-		
+		chatMembers.put(info.id, info);
+		displayUsers();		
 	}
 
 	@Override
 	public void removeUser(String id) {
-		// TODO Auto-generated method stub
+		chatMembers.remove(id);
+		displayUsers();
 	}
 
 	@Override
