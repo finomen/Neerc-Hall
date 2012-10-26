@@ -8,5 +8,5 @@ public interface TaskManager {
 	public TaskPerformer getSelf();
 	public void Start();
 	public void Stop();
-	public int getMaxId();
+	public int getNextId();
 }

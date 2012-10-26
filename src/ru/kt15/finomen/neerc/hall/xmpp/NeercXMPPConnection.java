@@ -255,7 +255,7 @@ public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 	}
 
 	@Override
-	public int getMaxId() {
+	public int getNextId() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

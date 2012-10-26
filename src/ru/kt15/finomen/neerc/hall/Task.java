@@ -26,6 +26,23 @@ public class Task {
 			this.xmlValue = xmlValue;
 		}
 
+		public static TaskType fromString(String s) {
+			switch(s) {
+			case "todo":
+				return TODO;
+			case "confirm":
+				return CONFIRM;
+			case "okfail":
+				return OKFAIL;
+			case "question":
+				return QUESTION;
+			case "extended":
+				return EXTENDED;
+			}
+			
+			return null;
+		}
+		
 	}
 
 	static public class TaskState {
@@ -39,6 +56,20 @@ public class Task {
 			
 			private StateId(String xmlValue) {
 				this.xmlValue = xmlValue;
+			}
+
+			public static StateId fromString(String type) {
+				switch(type) {
+				case "none":
+					return ASSIGNED;
+				case "running":
+					return IN_PROGRESS;
+				case "success":
+					return DONE;
+				case "fail":
+					return FAILED;
+				}
+				return null;
 			}
 		}
 
@@ -91,6 +122,10 @@ public class Task {
 		public String getMessage() {
 			return message;
 		}
+
+		public static TaskState fromStrings(String type,	String message) {
+			return new TaskState(StateId.fromString(type), message);
+		}
 	}
 
 	static public class TaskPerformer {
@@ -121,6 +156,39 @@ public class Task {
 		}
 	}
 
+	private static TaskState.StateId[] statesPreset(TaskType type) {
+		TaskState.StateId[] possibleStates;
+		switch (type) {
+		case CONFIRM:
+			possibleStates = new TaskState.StateId[2];
+			possibleStates[0] = StateId.ASSIGNED;
+			possibleStates[1] = StateId.DONE;
+			break;
+		case OKFAIL:
+			possibleStates = new TaskState.StateId[3];
+			possibleStates[0] = StateId.ASSIGNED;
+			possibleStates[1] = StateId.DONE;
+			possibleStates[2] = StateId.FAILED;
+			break;
+		case QUESTION:
+			possibleStates = new TaskState.StateId[1];
+			possibleStates[0] = StateId.ASSIGNED;
+			break;
+		case TODO:
+			possibleStates = new TaskState.StateId[3];
+			possibleStates[0] = StateId.ASSIGNED;
+			possibleStates[1] = StateId.IN_PROGRESS;
+			possibleStates[2] = StateId.DONE;
+			break;
+		default:
+			possibleStates = new TaskState.StateId[1]; // FIXME:
+			possibleStates[0] = StateId.ASSIGNED;
+			break;
+		}
+		
+		return possibleStates;
+	}
+	
 	public Task(TaskManager manager, String text, TaskPerformer[] performers,
 			TaskType type) {
 		taskType = type;
@@ -135,35 +203,21 @@ public class Task {
 			state.put(performer, ts);
 		}
 
-		switch (type) {
-		case CONFIRM:
-			this.possibleStates = new TaskState.StateId[2];
-			this.possibleStates[0] = StateId.ASSIGNED;
-			this.possibleStates[1] = StateId.DONE;
-			break;
-		case OKFAIL:
-			this.possibleStates = new TaskState.StateId[3];
-			this.possibleStates[0] = StateId.ASSIGNED;
-			this.possibleStates[1] = StateId.DONE;
-			this.possibleStates[2] = StateId.FAILED;
-			break;
-		case QUESTION:
-			this.possibleStates = new TaskState.StateId[1];
-			this.possibleStates[0] = StateId.ASSIGNED;
-			break;
-		case TODO:
-			this.possibleStates = new TaskState.StateId[3];
-			this.possibleStates[0] = StateId.ASSIGNED;
-			this.possibleStates[1] = StateId.IN_PROGRESS;
-			this.possibleStates[2] = StateId.DONE;
-			break;
-		default:
-			this.possibleStates = new TaskState.StateId[1]; // FIXME:
-			this.possibleStates[0] = StateId.ASSIGNED;
-			break;
-		}
-		
-		this.id = manager.getMaxId() + 1;
+		possibleStates = statesPreset(type);
+		this.id = manager.getNextId();
+
+	}
+	
+	public Task(TaskManager manager, int id, String text, Date time, TaskPerformer[] performers,
+			TaskType type, Map<TaskPerformer, TaskState> state) {
+		taskType = type;
+		this.manager = manager;
+		this.text = text;
+		this.time = time;
+		this.performers = performers;
+		this.state = state;
+		possibleStates = statesPreset(type);
+		this.id = id;
 
 	}
 

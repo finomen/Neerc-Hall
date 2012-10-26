@@ -51,7 +51,7 @@ public class TestTask {
 		}
 
 		@Override
-		public int getMaxId() {
+		public int getNextId() {
 			// TODO Auto-generated method stub
 			return 0;
 		}
