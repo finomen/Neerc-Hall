@@ -27,7 +27,6 @@ public class NeercTaskIQ extends NeercIQ {
 		buf.append(">");
 		
 		for (TaskPerformer performer: task.getPerformerList()) {
-			TaskState status = task.getState(performer);
 			buf.append("<status ");
 			buf.append(" for=\"").append(escape(performer.getName())).append("\"");
 			buf.append(" type=\"").append(escape(task.getState(performer).getId().xmlValue)).append("\"");
