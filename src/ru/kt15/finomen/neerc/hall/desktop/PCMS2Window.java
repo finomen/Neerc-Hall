@@ -2,31 +2,24 @@ package ru.kt15.finomen.neerc.hall.desktop;
 
 import java.net.MalformedURLException;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
+import pcms2.services.client.AuthorizationFailedException;
+import pcms2.services.client.ClientStandingsService;
+import pcms2.services.client.TransportStandings;
 import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
 import swing2swt.layout.BorderLayout;
 
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.layout.GridData;
-
 import com.caucho.hessian.client.HessianProxyFactory;
-
-import pcms2.services.client.AuthorizationFailedException;
-import pcms2.services.client.ClientStandingsService;
-import pcms2.services.client.LoginDataService;
-import pcms2.services.client.TransportStandings;
-import pcms2.services.scoring.Standings;
 
 public class PCMS2Window extends Composite implements Localized {
 	private LocaleManager localeManager;

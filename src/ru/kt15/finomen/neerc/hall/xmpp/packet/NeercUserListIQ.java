@@ -1,7 +1,5 @@
 package ru.kt15.finomen.neerc.hall.xmpp.packet;
 
-import java.util.*;
-import org.jivesoftware.smack.packet.IQ;
 import org.xmlpull.v1.XmlPullParser;
 
 import ru.kt15.finomen.neerc.hall.xmpp.utils.XmlUtils;

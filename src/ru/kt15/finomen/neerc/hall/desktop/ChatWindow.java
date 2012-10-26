@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Text;
 
 import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
-import ru.kt15.finomen.neerc.core.Log;
 import ru.kt15.finomen.neerc.hall.ChatListener;
 import ru.kt15.finomen.neerc.hall.ChatManager;
 import ru.kt15.finomen.neerc.hall.Message;

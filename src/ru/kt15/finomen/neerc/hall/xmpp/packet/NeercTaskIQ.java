@@ -1,6 +1,5 @@
 package ru.kt15.finomen.neerc.hall.xmpp.packet;
 
-import java.util.*;
 
 /**
  * @author Dmitriy Trofimov

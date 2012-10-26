@@ -12,12 +12,9 @@ import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.AndFilter;
-import org.jivesoftware.smack.filter.OrFilter;
 import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smack.packet.Presence.Type;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.Occupant;
 
@@ -25,13 +22,12 @@ import ru.kt15.finomen.neerc.core.Log;
 import ru.kt15.finomen.neerc.hall.ChatListener;
 import ru.kt15.finomen.neerc.hall.ChatManager;
 import ru.kt15.finomen.neerc.hall.Message;
-import ru.kt15.finomen.neerc.hall.Task;
+import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
+import ru.kt15.finomen.neerc.hall.Task.TaskState;
 import ru.kt15.finomen.neerc.hall.TaskListener;
 import ru.kt15.finomen.neerc.hall.TaskManager;
 import ru.kt15.finomen.neerc.hall.UserInfo;
 import ru.kt15.finomen.neerc.hall.UserStatus;
-import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
-import ru.kt15.finomen.neerc.hall.Task.TaskState;
 
 public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 	private final Set<ChatListener> listeners;

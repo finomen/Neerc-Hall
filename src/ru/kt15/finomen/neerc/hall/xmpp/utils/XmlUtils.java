@@ -1,6 +1,5 @@
 package ru.kt15.finomen.neerc.hall.xmpp.utils;
 
-import java.util.Map;
 
 /**
  * @author Evgeny Mandrikov
