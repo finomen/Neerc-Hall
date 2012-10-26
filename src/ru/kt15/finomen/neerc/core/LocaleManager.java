@@ -68,8 +68,7 @@ public static class Locale {
 			try {
 				dump();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.writeError(e.getLocalizedMessage());
 			}
 			 
 			return str;
@@ -90,8 +89,7 @@ public LocaleManager() throws UnsupportedEncodingException {
 			Locale l = new Locale(localeFile);
 			locales.add(l);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.writeError(e.getLocalizedMessage());
 		}
 	}
 	

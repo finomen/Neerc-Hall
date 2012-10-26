@@ -254,4 +254,10 @@ public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 		connection.disconnect();
 	}
 
+	@Override
+	public int getMaxId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

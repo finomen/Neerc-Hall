@@ -49,6 +49,12 @@ public class TestTask {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public int getMaxId() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 		
 	}
 
