@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
 import ru.kt15.finomen.neerc.hall.ChatManager;
-import ru.kt15.finomen.neerc.hall.XMPPChatManager;
+import ru.kt15.finomen.neerc.hall.xmpp.NeercXMPPConnection;
 
 public class MainWindow implements Localized {
 
@@ -35,7 +35,7 @@ public class MainWindow implements Localized {
 	private MenuItem mntmFullScreen;
 	
 	//Managers
-	private final ChatManager chatManager = new XMPPChatManager();
+	private final NeercXMPPConnection xmppConnection = new NeercXMPPConnection();
 	
 	public MainWindow(LocaleManager localeManager) {
 		this.localeManager = localeManager;
@@ -68,6 +68,8 @@ public class MainWindow implements Localized {
 				display.sleep();
 			}
 		}
+		
+		xmppConnection.Stop();
 	}
 	
 	public void setLocaleStrings() {
@@ -100,8 +102,8 @@ public class MainWindow implements Localized {
 		tbtmTasks.setControl(taskTab);
 		
 		tbtmChat = new CTabItem(tabFolder, SWT.NONE);
-		chatTab = new ChatWindow(chatManager, localeManager, tabFolder, SWT.BORDER);
-		chatManager.addListener(chatTab);
+		chatTab = new ChatWindow(xmppConnection, localeManager, tabFolder, SWT.BORDER);
+		xmppConnection.addListener(chatTab);
 		tbtmChat.setControl(chatTab);
 		
 		tbtmPCMS = new CTabItem(tabFolder, SWT.NONE);
@@ -177,7 +179,7 @@ public class MainWindow implements Localized {
 		localeManager.addLocalizedObject(this);
 		
 		
-		chatManager.Start();
+		xmppConnection.Start();
 	}
 
 	@Override

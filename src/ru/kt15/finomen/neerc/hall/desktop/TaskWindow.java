@@ -150,6 +150,18 @@ public class TaskWindow extends Composite implements TaskListener, Localized {
 							@Override
 							public TaskPerformer getSelf() {
 								return new TaskPerformer("self");
+							}
+
+							@Override
+							public void Start() {
+								// TODO Auto-generated method stub
+								
+							}
+
+							@Override
+							public void Stop() {
+								// TODO Auto-generated method stub
+								
 							}}; 
 						Task.TaskPerformer[] pls = {new TaskPerformer("self"), new TaskPerformer("other1")};
 						Task.TaskState.StateId[] pst = {Task.TaskState.StateId.ASSIGNED, Task.TaskState.StateId.DONE, Task.TaskState.StateId.IN_PROGRESS};

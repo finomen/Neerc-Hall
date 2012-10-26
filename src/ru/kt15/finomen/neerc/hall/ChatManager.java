@@ -5,4 +5,5 @@ public interface ChatManager {
 	public void sendMessage(Message message);
 	public UserInfo getUser();
 	public void Start();
+	public void Stop();
 }

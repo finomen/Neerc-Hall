@@ -6,4 +6,6 @@ public interface TaskManager {
 	public void changeTaskState(int id, Task.TaskState state);
 	public void addListener(TaskListener listener);
 	public TaskPerformer getSelf();
+	public void Start();
+	public void Stop();
 }

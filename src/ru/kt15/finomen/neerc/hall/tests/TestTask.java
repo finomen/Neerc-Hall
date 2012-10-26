@@ -37,6 +37,18 @@ public class TestTask {
 		public Task.TaskPerformer getSelf() {
 			return new Task.TaskPerformer("self");
 		}
+
+		@Override
+		public void Start() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void Stop() {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 

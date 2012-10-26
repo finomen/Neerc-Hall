@@ -1,4 +1,4 @@
-package ru.kt15.finomen.neerc.hall;
+package ru.kt15.finomen.neerc.hall.xmpp;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,10 +22,18 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.Occupant;
 
 import ru.kt15.finomen.neerc.core.Log;
+import ru.kt15.finomen.neerc.hall.ChatListener;
+import ru.kt15.finomen.neerc.hall.ChatManager;
+import ru.kt15.finomen.neerc.hall.Message;
+import ru.kt15.finomen.neerc.hall.Task;
+import ru.kt15.finomen.neerc.hall.TaskListener;
+import ru.kt15.finomen.neerc.hall.TaskManager;
+import ru.kt15.finomen.neerc.hall.UserInfo;
+import ru.kt15.finomen.neerc.hall.UserStatus;
 import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
 import ru.kt15.finomen.neerc.hall.Task.TaskState;
 
-public class XMPPChatManager implements ChatManager, TaskManager, Runnable {
+public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 	private final Set<ChatListener> listeners;
 	private UserInfo user;
 	private TaskPerformer self;
@@ -35,7 +43,7 @@ public class XMPPChatManager implements ChatManager, TaskManager, Runnable {
 	private MultiUserChat conference;
 	private final Map<String, UserInfo> users;
 
-	public XMPPChatManager() {
+	public NeercXMPPConnection() {
 		listeners = new HashSet<ChatListener>();
 		users = new HashMap<String, UserInfo>();
 		user = new UserInfo();
@@ -95,7 +103,6 @@ public class XMPPChatManager implements ChatManager, TaskManager, Runnable {
 					}
 				};
 				
-				//conference.addMessageListener(myListener);
 				conference.addParticipantListener(new PacketListener() {
 					@Override
 					public void processPacket(Packet packet) {
@@ -109,17 +116,22 @@ public class XMPPChatManager implements ChatManager, TaskManager, Runnable {
 				connection.addPacketListener(myListener, filter);
 				conference.join("test");
 
-				while (connection.isConnected()) {
+				while (connection.isConnected() && ! Thread.interrupted()) {
 					Thread.sleep(10000);
 				}
+			} catch (InterruptedException e) {
+				return;
 			} catch (Exception e) {
 				Log.writeError(e.getLocalizedMessage());
 			}
 		}
 	}
 	
-	private void processPresence(org.jivesoftware.smack.packet.Presence presence) {
+	private void processPresence(org.jivesoftware.smack.packet.Presence presence) {	
+		System.out.println(presence.getExtensions().toString());	
+		
 		String id = presence.getFrom();
+		
 		if (!users.containsKey(id)) {
 			UserInfo ui = new UserInfo();
 			ui.id = id;
@@ -147,18 +159,28 @@ public class XMPPChatManager implements ChatManager, TaskManager, Runnable {
 		case available:
 			ui.status = UserStatus.ONLINE;
 			break;
-		case error:
-			break;
-		case subscribe:
-			break;
-		case subscribed:
-			break;
 		case unavailable:
 			ui.status = UserStatus.OFFLINE;
 			break;
-		case unsubscribe:
+		default:
 			break;
-		case unsubscribed:
+		}
+		
+		switch(presence.getMode()) {
+		case available:
+			ui.status = UserStatus.ONLINE;
+			break;
+		case away:
+			ui.status = UserStatus.AWAY;
+			break;
+		case chat:
+			ui.status = UserStatus.CHAT;
+			break;
+		case dnd:
+			ui.status = UserStatus.DND;
+			break;
+		case xa:
+			ui.status = UserStatus.EXTENDED_AWAY;
 			break;
 		default:
 			break;
@@ -222,6 +244,18 @@ public class XMPPChatManager implements ChatManager, TaskManager, Runnable {
 	@Override
 	public TaskPerformer getSelf() {
 		return self;
+	}
+
+	@Override
+	public void Stop() {
+		worker.interrupt();
+		try {
+			worker.join();
+		} catch (InterruptedException e) {
+		}
+		
+		conference.leave();
+		connection.disconnect();
 	}
 
 }
