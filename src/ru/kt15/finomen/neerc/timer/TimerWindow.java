@@ -312,6 +312,8 @@ public class TimerWindow {
 				display.sleep();
 			}
 		}
+		
+		socket.stop();
 	}
 
 	/**

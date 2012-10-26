@@ -122,4 +122,15 @@ public class TimerSocket implements Runnable {
 			//buf.flip();
 		}
 	}
+
+	public void stop() {
+		worker.interrupt();
+		watch.interrupt();
+		try {
+			worker.join();
+			watch.join();
+		} catch (InterruptedException e) {
+			//FIXME:
+		}
+	}
 }
