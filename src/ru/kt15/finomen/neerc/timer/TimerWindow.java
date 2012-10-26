@@ -39,7 +39,6 @@ public class TimerWindow {
 		Log.writeInfo("Loading config...");
 		Map<String, Object> data = (Map<String, Object>) yaml
 				.load(new FileReader(new File("timer/config.yaml")));
-		Map<String, Object> network = (Map<String, Object>) data.get("network");
 		Log.writeInfo("Loading color map...");
 		colorMap = (Map<String, Object>) yaml.load(new FileReader(new File("timer/colors.yaml")));
 		Log.writeInfo("All files loaded, starting...");
