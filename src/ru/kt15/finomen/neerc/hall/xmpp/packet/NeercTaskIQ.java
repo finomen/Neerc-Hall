@@ -2,7 +2,6 @@ package ru.kt15.finomen.neerc.hall.xmpp.packet;
 
 import ru.kt15.finomen.neerc.hall.Task;
 import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
-import ru.kt15.finomen.neerc.hall.Task.TaskState;
 
 
 /**
