@@ -103,6 +103,7 @@ public class MainWindow implements Localized {
 				
 		taskTab = new TaskWindow(localeManager, tabFolder, SWT.BORDER);
 		tbtmTasks.setControl(taskTab);
+		xmppConnection.addListener(taskTab);
 		
 		tbtmChat = new CTabItem(tabFolder, SWT.NONE);
 		chatTab = new ChatWindow(xmppConnection, localeManager, tabFolder, SWT.BORDER);

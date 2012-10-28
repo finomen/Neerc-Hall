@@ -124,78 +124,7 @@ public class TaskWindow extends Composite implements TaskListener, Localized {
 						
 		new StateChangeListener(getShell(), activeTasks);
 		new StateChangeListener(getShell(), historyTasks);
-		
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				synchronized(this) {
-					try {
-						wait(3000);
-						TaskManager tm = new TaskManager() {
-
-							@Override
-							public void changeTaskState(int id, TaskState state) {
-								// TODO Auto-generated method stub
-								
-							}
-
-							@Override
-							public void addListener(TaskListener listener) {
-								// TODO Auto-generated method stub
-								
-							}
-
-							@Override
-							public TaskPerformer getSelf() {
-								return new TaskPerformer("self");
-							}
-
-							@Override
-							public void Start() {
-								// TODO Auto-generated method stub
-								
-							}
-
-							@Override
-							public void Stop() {
-								// TODO Auto-generated method stub
-								
-							}
-
-							@Override
-							public int getNextId() {
-								// TODO Auto-generated method stub
-								return 0;
-							}
-
-							@Override
-							public void newTask(Task task) {
-								// TODO Auto-generated method stub
-								
-							}}; 
-						Task.TaskPerformer[] pls = {new TaskPerformer("self"), new TaskPerformer("other1")};
-						Task.TaskState.StateId[] pst = {Task.TaskState.StateId.ASSIGNED, Task.TaskState.StateId.DONE, Task.TaskState.StateId.IN_PROGRESS};
-						Task t = new Task(tm, 1, "Task1", new Date(), pls, pst);
-						addTask(t);
-						Task.TaskPerformer[] pls1 = {new TaskPerformer("self1"), new TaskPerformer("other1")};
-						Map<TaskPerformer, TaskState> state = new HashMap<Task.TaskPerformer, Task.TaskState>();
-						state.put(pls1[0], TaskState.assigned());
-						state.put(pls1[1], TaskState.done());
-						Task.TaskState.StateId[] pst1 = {Task.TaskState.StateId.ASSIGNED, Task.TaskState.StateId.DONE, Task.TaskState.StateId.FAILED};
-						t = new Task(tm, 2, "Task2", new Date(), pls1, pst1, state);
-						System.out.println("UPD1");
-						addTask(t);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
-				}
 				
-			}
-			
-		}).start();
-		
 		localeManager.addLocalizedObject(this);
 	}
 
