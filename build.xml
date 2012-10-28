@@ -94,6 +94,16 @@
 		<copy todir="dist-linux_x64/resources">
 			<fileset dir="resources"/>
 		</copy>
+		
+		<zip destfile="neerc-hall-windows.zip">
+			<fileset dir="dist-win"/>
+		</zip>
+		
+		<zip destfile="neerc-hall-linux_x64.zip">
+			<fileset dir="dist-linux_x64"/>
+		</zip>
+		
+		
 	</target>
 
 	<target name="clean" description="clean up">
