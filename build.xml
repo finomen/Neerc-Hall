@@ -27,6 +27,8 @@
 			<classpath>
 				<pathelement location="bin/" />
 				<pathelement path="junit.jar" />
+				<pathelement path="smack.jar" />
+				<pathelement path="smackx.jar" />
 			</classpath>
 			<classpath refid="classpath"/>
 			<formatter type="plain" />
@@ -72,8 +74,10 @@
 		<copy file="neerc-timer.jar" todir="dist-linux_x64"/>
 		<copy file="neerc-core.jar" todir="dist-win"/>
 		<copy file="neerc-core.jar" todir="dist-linux_x64"/>
-		<copy file="snakeyaml-1.10.jar" todir="dist-win"/>
-		<copy file="snakeyaml-1.10.jar" todir="dist-linux_x64"/>
+		<copy file="snakeyaml-1.11.jar" todir="dist-win"/>
+		<copy file="snakeyaml-1.11.jar" todir="dist-linux_x64"/>
+		<copy file="settings.yaml" todir="dist-win"/>
+		<copy file="settings.yaml" todir="dist-linux_x64"/>
 		<copy file="swt-win.jar" tofile="dist-win/swt.jar"/>
 		<copy file="swt-linux-x64.jar" tofile="dist-linux_x64/swt.jar"/>
 		<copy file="locale/ruRU.loc" todir="dist-win/locale/"/>
