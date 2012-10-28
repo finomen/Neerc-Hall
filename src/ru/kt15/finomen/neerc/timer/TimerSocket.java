@@ -22,7 +22,7 @@ import ru.kt15.finomen.neerc.core.Log;
 public class TimerSocket implements Runnable {
 	private final TimerWindow window;
 	private final DatagramChannel channel;
-	private final List<MembershipKey> memberKey;
+	private MembershipKey memberKey = null;
 	private final Thread worker, watch;
 	private final SocketAddress server;
 	private AtomicLong lastSync;
@@ -35,17 +35,20 @@ public class TimerSocket implements Runnable {
 		channel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
 		
 		channel.bind(new InetSocketAddress((Integer)config.get("udp-port")));
-		memberKey = new ArrayList<MembershipKey>();
 		
 		if (config.containsKey("multicast-group")) {
-			for (NetworkInterface interf : Collections.list(NetworkInterface.getNetworkInterfaces())) {
-				try {
-					channel.setOption(StandardSocketOptions.IP_MULTICAST_IF, interf);
-					memberKey.add(channel.join(InetAddress.getByName((String)config.get("multicast-group")), interf));
-					Log.writeInfo("Joined group " + config.get("multicast-group") + " on interface " + interf.getDisplayName() + "[" + interf.getName() + "]");
-				} catch (IOException e)
-				{
-					Log.writeError("Failed to join group " + config.get("multicast-group") + " on interface " + interf.getDisplayName());
+			InetAddress groupAddr = InetAddress.getByName((String)config.get("multicast-group"));
+			NetworkInterface interf = NetworkInterface.getByName((String)config.get("multicast-iface"));
+			try {
+				channel.setOption(StandardSocketOptions.IP_MULTICAST_IF, interf);
+				memberKey = channel.join(groupAddr, interf);
+				Log.writeInfo("Joined group " + config.get("multicast-group") + " on interface " + interf.getDisplayName() + "[" + interf.getName() + "]");				
+			} catch (IOException e)
+			{
+				Log.writeError("Failed to join group " + config.get("multicast-group") + " on interface " + interf.getDisplayName());
+				Log.writeInfo("Available interfaces");
+				for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+					Log.writeInfo(iface.getName() + ": " + iface.getDisplayName());
 				}
 			}
 		}
