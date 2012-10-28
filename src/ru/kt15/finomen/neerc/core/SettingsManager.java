@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,6 +77,31 @@ public class SettingsManager {
 		}
 		
 		return value;
+	}
+	
+	public Map<String, Object> getTree() {
+		return Collections.unmodifiableMap(settings);
+	}
+
+	public <T> void set(String name, T value) {
+		Log.writeDebug("Set " + name + " = " + value.toString());
+		String[] path = name.split("\\.");
+		Map<String, Object> currentNode = settings;
+		
+		for (int currentPos = 0; currentPos < path.length - 1; ++currentPos) {
+			if (currentNode.containsKey(path[currentPos])
+					&& (currentNode.get(path[currentPos]) instanceof Map<?, ?>)) {
+				currentNode = (Map<String, Object>)currentNode.get(path[currentPos]);
+			} else {
+				Map<String, Object> nm = new HashMap<String, Object>();
+				currentNode.put(path[currentPos], nm);
+				currentNode = nm;
+			}
+		}
+		
+		currentNode.put(path[path.length - 1], value);
+		
+		save();
 	}
 	
 	

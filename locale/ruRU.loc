@@ -44,3 +44,5 @@ dictionary:
   'Last success:': 'Последний успех:'
   Contest_Success: null
   Monitor: Монитор
+  Edit: null
+  Settings: null

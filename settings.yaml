@@ -12,3 +12,4 @@ hall:
       service: neerc.finomen.kt15.ru
       ping:
         enabled: true
+        interval: 5

@@ -27,6 +27,8 @@ public class MainWindow implements Localized {
 	private CTabItem tbtmChat;
 	private CTabItem tbtmPCMS;
 	private MenuItem mntmLanguage;
+	private MenuItem mntmEdit;
+	private MenuItem mntmSettings;
 	private MenuItem mntmHelp;
 	private MenuItem mntmHelp_1;
 	private MenuItem mntmAbout;
@@ -79,6 +81,8 @@ public class MainWindow implements Localized {
 		mntmLanguage.setText(localeManager.localize("Language"));
 		mntmHelp.setText(localeManager.localize("Help"));
 		mntmHelp_1.setText(localeManager.localize("Help"));
+		mntmEdit.setText(localeManager.localize("Edit"));
+		mntmSettings.setText(localeManager.localize("Settings"));
 		mntmAbout.setText(localeManager.localize("About"));
 		mntmView.setText(localeManager.localize("View"));
 		mntmFullScreen.setText(localeManager.localize("Full screen"));
@@ -114,6 +118,7 @@ public class MainWindow implements Localized {
 		
 		mntmLanguage = new MenuItem(menu, SWT.CASCADE);	
 		
+		
 		mntmView =  new MenuItem(menu, SWT.CASCADE);
 		Menu menu_3 = new Menu(mntmLanguage);
 		mntmView.setMenu(menu_3);
@@ -127,6 +132,24 @@ public class MainWindow implements Localized {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
+		
+		mntmEdit =  new MenuItem(menu, SWT.CASCADE);
+		Menu menu_4 = new Menu(mntmEdit);
+		mntmEdit.setMenu(menu_4);
+		mntmSettings = new MenuItem(menu_4, SWT.NONE);
+		mntmSettings.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				new SettingsDialog(localeManager, shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM).open();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		
 		Menu menu_2 = new Menu(mntmLanguage);
 		mntmLanguage.setMenu(menu_2);
