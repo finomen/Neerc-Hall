@@ -31,6 +31,7 @@ public class MainWindow implements Localized {
 	private MenuItem mntmLanguage;
 	private MenuItem mntmEdit;
 	private MenuItem mntmSettings;
+	private MenuItem mntmNewTask;
 	private MenuItem mntmHelp;
 	private MenuItem mntmHelp_1;
 	private MenuItem mntmAbout;
@@ -86,6 +87,7 @@ public class MainWindow implements Localized {
 		mntmHelp_1.setText(localeManager.localize("Help"));
 		mntmEdit.setText(localeManager.localize("Edit"));
 		mntmSettings.setText(localeManager.localize("Settings"));
+		mntmNewTask.setText(localeManager.localize("New task"));
 		mntmAbout.setText(localeManager.localize("About"));
 		mntmView.setText(localeManager.localize("View"));
 		mntmFullScreen.setText(localeManager.localize("Full screen"));
@@ -149,6 +151,20 @@ public class MainWindow implements Localized {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				new SettingsDialog(localeManager, shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM).open();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		mntmNewTask = new MenuItem(menu_4, SWT.NONE);
+		mntmNewTask.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				new NewTask(localeManager, xmppConnection, shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM).open();
 			}
 
 			@Override

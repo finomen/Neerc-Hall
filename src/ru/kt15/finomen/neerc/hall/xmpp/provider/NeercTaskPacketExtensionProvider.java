@@ -55,6 +55,10 @@ public class NeercTaskPacketExtensionProvider implements PacketExtensionProvider
     private Task parseTask(TaskManager taskManager, XmlPullParser parser) throws Exception {
     	Map<TaskPerformer, TaskState> state = new HashMap<Task.TaskPerformer, Task.TaskState>();
 		boolean done = false;
+		int id = Integer.parseInt(parser.getAttributeValue("", "id"));
+		String title = parser.getAttributeValue("", "title");
+		Task.TaskType type = Task.TaskType.fromString(parser.getAttributeValue("", "type"));
+		
 		while (!done) {
 			int eventType = parser.next();
 			if (eventType == XmlPullParser.START_TAG) {
@@ -74,11 +78,11 @@ public class NeercTaskPacketExtensionProvider implements PacketExtensionProvider
 				
 		return new Task(
 			taskManager,
-			Integer.parseInt(parser.getAttributeValue("", "id")),
-			parser.getAttributeValue("", "title"),
+			id,
+			title,
 			new Date(), //FIXME
 			performers,
-			Task.TaskType.fromString(parser.getAttributeValue("", "type")),
+			type,
 			state
 		);
     }

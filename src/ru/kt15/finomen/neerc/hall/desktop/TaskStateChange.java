@@ -173,6 +173,8 @@ public class TaskStateChange extends Dialog implements Localized {
 				} else if (btnFailed.getSelection()) {
 					task.changeState(Task.TaskState.failed(text.getText()));
 				}
+				
+				shell.close();
 			}
 		});
 		

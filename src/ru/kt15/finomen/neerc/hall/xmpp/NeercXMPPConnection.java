@@ -211,6 +211,7 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
 	public void newTask(Task task) {
 		NeercTaskIQ packet = new NeercTaskIQ(task);
 		packet.setTo(SettingsManager.instance().get("hall.chat.xmpp.service", "neerc.localhost"));
+		Log.writeDebug(packet.toXML());
 		connection.sendPacket(packet);
     }
 
@@ -269,6 +270,7 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
 			}
 			for (TaskListener listener : taskListeners) {
 				if (addTask) {
+					tasks.put(task.getId(), task);
 					listener.addTask(task);
 				} else {
 					listener.updateTask(task);
@@ -530,6 +532,16 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
 			}
 		}
 		
+	}
+
+	@Override
+	public Iterable<TaskPerformer> getPerformers() {
+		Set<TaskPerformer> performers = new HashSet<TaskPerformer>();
+		for (UserInfo ui : users.values()) {
+			TaskPerformer p = new TaskPerformer(ui.name);
+			performers.add(p);
+		}
+		return performers;
 	}
 
 }

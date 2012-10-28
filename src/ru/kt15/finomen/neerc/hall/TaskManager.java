@@ -10,4 +10,5 @@ public interface TaskManager {
 	public void Start();
 	public void Stop();
 	public int getNextId();
+	public Iterable<TaskPerformer> getPerformers();
 }

@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.Test;
 
 import ru.kt15.finomen.neerc.hall.Task;
+import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
 import ru.kt15.finomen.neerc.hall.TaskListener;
 import ru.kt15.finomen.neerc.hall.TaskManager;
 import ru.kt15.finomen.neerc.hall.Task.TaskState;
@@ -60,6 +61,12 @@ public class TestTask {
 		public void newTask(Task task) {
 			// TODO Auto-generated method stub
 			
+		}
+
+		@Override
+		public Iterable<TaskPerformer> getPerformers() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 		
 	}

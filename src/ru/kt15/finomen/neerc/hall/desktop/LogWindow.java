@@ -56,7 +56,7 @@ public class LogWindow extends Composite implements Localized, ILog {
 
 		localeManager.addLocalizedObject(this);
 
-		Log.setImpl(this);
+		//Log.setImpl(this);
 	}
 
 	@Override

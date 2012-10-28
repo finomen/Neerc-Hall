@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import ru.kt15.finomen.neerc.core.Log;
 import ru.kt15.finomen.neerc.hall.Task;
 import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
 import ru.kt15.finomen.neerc.hall.Task.TaskState;
@@ -87,15 +88,20 @@ public class NeercTaskListIQ extends NeercIQ {
 		}
     }
 
-	public static Task parseTask(TaskManager taskManager, XmlPullParser parser) throws Exception {
-		Map<TaskPerformer, TaskState> state = new HashMap<Task.TaskPerformer, Task.TaskState>();
+	private Task parseTask(TaskManager taskManager, XmlPullParser parser) throws Exception {
+    	Map<TaskPerformer, TaskState> state = new HashMap<Task.TaskPerformer, Task.TaskState>();
 		boolean done = false;
+		int id = Integer.parseInt(parser.getAttributeValue("", "id"));
+		String title = parser.getAttributeValue("", "title");
+		Task.TaskType type = Task.TaskType.fromString(parser.getAttributeValue("", "type"));
+		
 		while (!done) {
 			int eventType = parser.next();
 			if (eventType == XmlPullParser.START_TAG) {
 				if (parser.getName().equals("status")) {
 					TaskPerformer p = new TaskPerformer(parser.getAttributeValue("", "for"));
 					Task.TaskState s = Task.TaskState.fromStrings(parser.getAttributeValue("", "type"), parser.getAttributeValue("", "value"));
+					Log.writeDebug("Task state: " + p.getName() + " = " + s.toString());
 					state.put(p, s);
 				}
 			} else if (eventType == XmlPullParser.END_TAG) {
@@ -109,12 +115,12 @@ public class NeercTaskListIQ extends NeercIQ {
 				
 		return new Task(
 			taskManager,
-			Integer.parseInt(parser.getAttributeValue("", "id")),
-			parser.getAttributeValue("", "title"),
+			id,
+			title,
 			new Date(), //FIXME
 			performers,
-			Task.TaskType.fromString(parser.getAttributeValue("", "type")),
+			type,
 			state
 		);
-	}
+    }
 }

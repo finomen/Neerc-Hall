@@ -112,7 +112,7 @@ public class Task {
 
 		private TaskState(StateId id, String message) {
 			this.id = id;
-			this.message = message;
+			this.message = message != null ? message : "";
 		}
 
 		public TaskState.StateId getId() {
