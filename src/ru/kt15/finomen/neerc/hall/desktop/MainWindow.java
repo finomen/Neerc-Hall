@@ -21,9 +21,11 @@ public class MainWindow implements Localized {
 	private TaskWindow taskTab;
 	private ChatWindow chatTab;
 	private PCMS2Window pcmsTab;
+	private LogWindow logTab;
 	private final LocaleManager localeManager;
 	private CTabFolder tabFolder;
 	private CTabItem tbtmTasks;
+	private CTabItem tbtmLog;
 	private CTabItem tbtmChat;
 	private CTabItem tbtmPCMS;
 	private MenuItem mntmLanguage;
@@ -75,6 +77,7 @@ public class MainWindow implements Localized {
 	
 	public void setLocaleStrings() {
 		shell.setText(localeManager.localize("Neerc hall console"));
+		tbtmLog.setText(localeManager.localize("Log"));
 		tbtmTasks.setText(localeManager.localize("Tasks"));
 		tbtmChat.setText(localeManager.localize("Chat"));
 		tbtmPCMS.setText(localeManager.localize("PCMS2 Monitor"));
@@ -100,7 +103,11 @@ public class MainWindow implements Localized {
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		
 		tbtmTasks = new CTabItem(tabFolder, SWT.NONE);
-				
+						
+		tbtmLog = new CTabItem(tabFolder, SWT.NONE);
+		logTab = new LogWindow(localeManager, tabFolder, SWT.BORDER);
+		tbtmLog.setControl(logTab);
+		
 		taskTab = new TaskWindow(localeManager, tabFolder, SWT.BORDER);
 		tbtmTasks.setControl(taskTab);
 		xmppConnection.addListener(taskTab);

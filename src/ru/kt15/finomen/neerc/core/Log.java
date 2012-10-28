@@ -2,8 +2,8 @@ package ru.kt15.finomen.neerc.core;
 
 import java.util.Date;
 
-public abstract class Log {
-	private static Log logImpl = new SystemLog();
+public abstract class Log implements ILog{
+	private static ILog logImpl = new SystemLog();
 	
 	public static void writeError(String s, Exception e) {
 		writeError(s + ":" + e.getLocalizedMessage());
@@ -21,28 +21,24 @@ public abstract class Log {
 		logImpl.writeDebug(new Date(), s);
 	}
 	
-	public static void setImpl(Log impl) {
+	public static void setImpl(ILog impl) {
 		logImpl = impl;
 	}
-	
-	protected abstract void writeError(Date time, String s);
-	protected abstract void writeInfo(Date time, String s);
-	protected abstract void writeDebug(Date time, String s);
-	
+		
 	private static class SystemLog extends Log {
 
 		@Override
-		protected void writeError(Date time, String s) {
+		public void writeError(Date time, String s) {
 			System.err.println("[ " + time.toString() + " ] ERROR: " + s);
 		}
 
 		@Override
-		protected void writeInfo(Date time, String s) {
+		public void writeInfo(Date time, String s) {
 			System.out.println("[ " + time.toString() + " ] INFO:  " + s);
 		}
 
 		@Override
-		protected void writeDebug(Date time, String s) {
+		public void writeDebug(Date time, String s) {
 			System.out.println("[ " + time.toString() + " ] DEBUG: " + s);
 		}
 		

@@ -50,3 +50,5 @@ dictionary:
   Value: null
   'no': null
   'yes': null
+  Level: null
+  Log: null
