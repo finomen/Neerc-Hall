@@ -100,7 +100,7 @@ public class TimerSocket implements Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (!Thread.interrupted() && channel.isOpen()) {
 			try {
 				ByteBuffer buf = ByteBuffer.allocate(512);
 				/*SocketAddress remote = */channel.receive(buf);

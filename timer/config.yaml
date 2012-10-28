@@ -14,6 +14,6 @@ backgrounds:
 network:
   udp-port: 6767
   multicast-group: 225.0.0.1
-  multicats-iface: eth3
+  multicast-iface: eth3
   server-host: 127.0.0.1
   server-port: 6768
