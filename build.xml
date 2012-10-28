@@ -43,7 +43,7 @@
 		<jar jarfile="neerc-timer.jar" basedir="${bin}" includes="ru/kt15/finomen/neerc/timer/**">
 			<manifest>
 	            <attribute name="Main-Class" value="ru.kt15.finomen.neerc.timer.TimerWindow"/>
-				<attribute name="Class-Path" value="swt.jar snakeyaml-1.10.jar neerc-core.jar"/>
+				<attribute name="Class-Path" value="swt.jar snakeyaml-1.11.jar neerc-core.jar"/>
 	        </manifest>
 		</jar>
 	</target>
@@ -53,12 +53,29 @@
 		</jar>
 	</target>
 	
-	<target name="hall_jar" depends="compile,tests" description="generate the hall distribution">
-		<jar jarfile="neerc-hall.jar" basedir="${bin}" includes="ru/kt15/finomen/neerc/hall/**" excludes="*/tests/*">
+	<target name="hall_jar" depends="compile,tests" description="generate the hall core distribution">
+		<jar jarfile="neerc-hall.jar">
+		    <fileset dir="${bin}" >
+		        <include name="ru/kt15/finomen/neerc/hall/**"/>  
+			    <exclude name="ru/kt15/finomen/neerc/hall/tests/*" />  
+			    <exclude name="ru/kt15/finomen/neerc/hall/desktop/*" />  
+  			</fileset>
+  			<manifest>
+				<attribute name="Class-Path" value="swt.jar snakeyaml-1.11.jar neerc-core.jar smack.jar smackx.jar"/>
+	        </manifest>  
 		</jar>
 	</target>
 	
-	<target name="jars" depends="core_jar,timer_jar,hall_jar" description="Make all jars">
+	<target name="hall_desktop_jar" depends="compile,tests" description="generate the hall distribution">
+		<jar jarfile="neerc-hall-desktop.jar" basedir="${bin}" includes="ru/kt15/finomen/neerc/hall/desktop/**" excludes="*/tests/*">
+		    <manifest>
+	            <attribute name="Main-Class" value="ru.kt15.finomen.neerc.hall.desktop.MainWindow"/>
+				<attribute name="Class-Path" value="swt.jar swing2swt.jar snakeyaml-1.11.jar neerc-core.jar neerc-hall.jar smack.jar smackx.jar"/>
+	        </manifest>
+		</jar>
+	</target>
+	
+	<target name="jars" depends="core_jar,timer_jar,hall_jar,hall_desktop_jar" description="Make all jars">
 	</target>
 	
 	<target name="deploy" depends="jars">
@@ -69,6 +86,8 @@
 		<mkdir dir="dist-win/timer"/>
 		<mkdir dir="dist-linux_x64/timer"/>
 		<copy file="neerc-hall.jar" todir="dist-win"/>
+		<copy file="neerc-hall-desktop.jar" todir="dist-linux_x64"/>
+		<copy file="neerc-hall-desktop.jar" todir="dist-win"/>
 		<copy file="neerc-hall.jar" todir="dist-linux_x64"/>
 		<copy file="neerc-timer.jar" todir="dist-win"/>
 		<copy file="neerc-timer.jar" todir="dist-linux_x64"/>
@@ -76,8 +95,14 @@
 		<copy file="neerc-core.jar" todir="dist-linux_x64"/>
 		<copy file="snakeyaml-1.11.jar" todir="dist-win"/>
 		<copy file="snakeyaml-1.11.jar" todir="dist-linux_x64"/>
+		<copy file="smack.jar" todir="dist-win"/>
+		<copy file="smack.jar" todir="dist-linux_x64"/>
+		<copy file="smackx.jar" todir="dist-win"/>
+		<copy file="smackx.jar" todir="dist-linux_x64"/>
 		<copy file="settings.yaml" todir="dist-win"/>
 		<copy file="settings.yaml" todir="dist-linux_x64"/>
+		<copy file="swing2swt.jar" todir="dist-win"/>
+		<copy file="swing2swt.jar" todir="dist-linux_x64"/>
 		<copy file="swt-win.jar" tofile="dist-win/swt.jar"/>
 		<copy file="swt-linux-x64.jar" tofile="dist-linux_x64/swt.jar"/>
 		<copy file="locale/ruRU.loc" todir="dist-win/locale/"/>
