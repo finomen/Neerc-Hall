@@ -11,4 +11,5 @@ public class Message {
 	public Flag type;
 	public String text;
 	public Date time;
+	public boolean history; 
 }

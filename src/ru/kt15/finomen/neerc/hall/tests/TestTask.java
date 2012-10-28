@@ -55,6 +55,12 @@ public class TestTask {
 			// TODO Auto-generated method stub
 			return 0;
 		}
+
+		@Override
+		public void newTask(Task task) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 

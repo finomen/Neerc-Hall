@@ -4,6 +4,11 @@ import java.util.Date;
 
 public abstract class Log {
 	private static Log logImpl = new SystemLog();
+	
+	public static void writeError(String s, Exception e) {
+		writeError(s + ":" + e.getLocalizedMessage());
+	}
+	
 	public static void writeError(String s) {
 		logImpl.writeError(new Date(), s);
 	}

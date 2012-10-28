@@ -1,0 +1,14 @@
+hall:
+  chat:
+    xmpp:
+      smack:
+        debug: false
+      name: test
+      server:
+        port: 5222
+        host: finomen.kt15.ru
+      password: test
+      room: neerc@conference.finomen.kt15.ru
+      service: neerc.finomen.kt15.ru
+      ping:
+        enabled: true
