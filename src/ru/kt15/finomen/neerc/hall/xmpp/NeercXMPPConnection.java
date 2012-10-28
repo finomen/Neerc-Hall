@@ -22,6 +22,7 @@ import ru.kt15.finomen.neerc.core.Log;
 import ru.kt15.finomen.neerc.hall.ChatListener;
 import ru.kt15.finomen.neerc.hall.ChatManager;
 import ru.kt15.finomen.neerc.hall.Message;
+import ru.kt15.finomen.neerc.hall.Task;
 import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
 import ru.kt15.finomen.neerc.hall.Task.TaskState;
 import ru.kt15.finomen.neerc.hall.TaskListener;
@@ -30,7 +31,9 @@ import ru.kt15.finomen.neerc.hall.UserInfo;
 import ru.kt15.finomen.neerc.hall.UserStatus;
 
 public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
-	private final Set<ChatListener> listeners;
+	private final Set<ChatListener> chatListeners = new HashSet<ChatListener>();
+	private final Set<TaskListener> taskListeners = new HashSet<TaskListener>();
+	
 	private UserInfo user;
 	private TaskPerformer self;
 	private ConnectionConfiguration connConfig;
@@ -38,9 +41,11 @@ public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 	private Thread worker;
 	private MultiUserChat conference;
 	private final Map<String, UserInfo> users;
+	
+	private final Map<Integer, Task> tasks = new HashMap<Integer, Task>();
+	static int nextTaskId = 1;
 
 	public NeercXMPPConnection() {
-		listeners = new HashSet<ChatListener>();
 		users = new HashMap<String, UserInfo>();
 		user = new UserInfo();
 		user.id = "test@finomen.kt15.ru";
@@ -55,7 +60,12 @@ public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 
 	@Override
 	public void addListener(ChatListener listener) {
-		listeners.add(listener);
+		chatListeners.add(listener);
+	}
+	
+	@Override
+	public void addListener(TaskListener listener) {
+		taskListeners.add(listener);
 	}
 
 	@Override
@@ -140,7 +150,7 @@ public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 			ui.status = UserStatus.OFFLINE;			
 			users.put(id, ui);
 			
-			for(ChatListener lst : listeners) {
+			for(ChatListener lst : chatListeners) {
 	        	try {
 	        		lst.addUser(ui);
 	        	} catch (Exception e) {
@@ -184,7 +194,7 @@ public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 		
 		users.put(id,  ui);
 		
-		for(ChatListener lst : listeners) {
+		for(ChatListener lst : chatListeners) {
         	try {
         		lst.updateUser(ui);
         	} catch (Exception e) {
@@ -210,7 +220,7 @@ public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
         msg.text = message.getBody();
         msg.time = new Date();
         
-        for(ChatListener lst : listeners) {
+        for(ChatListener lst : chatListeners) {
         	try {
         		lst.newMessgae(msg);
         	} catch (Exception e) {
@@ -227,12 +237,6 @@ public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 
 	@Override
 	public void changeTaskState(int id, TaskState state) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addListener(TaskListener listener) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -256,8 +260,25 @@ public class NeercXMPPConnection implements ChatManager, TaskManager, Runnable {
 
 	@Override
 	public int getNextId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nextTaskId;
+	}
+
+	public void incomingTask(Task task) {
+		if (task.getId() >= nextTaskId) {
+			nextTaskId = task.getId() + 1;
+		}
+		
+		boolean newTask = !tasks.containsKey(task.getId());
+		tasks.put(task.getId(), task);
+		
+		for (TaskListener listener : taskListeners) {
+			if (newTask) {
+				listener.addTask(task);
+			} else {
+				listener.updateTask(task);
+			}
+		}
+		
 	}
 
 }
