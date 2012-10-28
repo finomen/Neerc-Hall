@@ -9,7 +9,7 @@ import ru.kt15.finomen.neerc.hall.Task.TaskPerformer;
  */
 public class NeercTaskIQ extends NeercIQ {
 	private Task task;
-	//TODO:
+
 	public NeercTaskIQ(Task task) {
 		super("task", "task");
 		this.task = task;
