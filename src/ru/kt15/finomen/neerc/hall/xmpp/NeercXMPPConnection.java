@@ -349,7 +349,7 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
             msg.time = timestamp;
             
             for (ChatListener listener: chatListeners) {
-            	listener.newMessgae(msg);
+            	listener.newMessage(msg);
             }
 
             lastActivity = timestamp;
@@ -442,7 +442,7 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
 		}
 		
 		for (Message msg : history) {
-			listener.newMessgae(msg);
+			listener.newMessage(msg);
 		}
 	}
 	
@@ -472,10 +472,16 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
 
 	@Override
 	public void Start() {
-		connect();
-        if (SettingsManager.instance().get("hall.chat.xmpp.ping.enabled", true)) {
-            (new Pinger()).start();
-        }
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				connect();
+		        if (SettingsManager.instance().get("hall.chat.xmpp.ping.enabled", true)) {
+		            (new Pinger()).start();
+		        }
+			}
+			
+		}).start();
 	}
 
 	@Override
@@ -493,11 +499,13 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
 	@Override
 	public void Stop() {
 		disconnect();
-		reconnectThread.interrupt();
-		try {
-			reconnectThread.join();
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
+		if (reconnectThread != null) {
+			reconnectThread.interrupt();
+			try {
+				reconnectThread.join();
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 

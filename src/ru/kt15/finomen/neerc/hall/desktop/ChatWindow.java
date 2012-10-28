@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Text;
 
 import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
+import ru.kt15.finomen.neerc.core.Log;
 import ru.kt15.finomen.neerc.hall.ChatListener;
 import ru.kt15.finomen.neerc.hall.ChatManager;
 import ru.kt15.finomen.neerc.hall.Message;
@@ -39,47 +40,50 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 	private Composite composite;
 	private Map<String, UserInfo> chatMembers;
 	private final ChatManager chatManager;
+
 	/**
 	 * Create the composite.
-	 * @param localeManager 
+	 * 
+	 * @param localeManager
 	 * @param parent
 	 * @param style
 	 */
-	public ChatWindow(ChatManager chatMgr, LocaleManager localeManager, Composite parent, int style) {
+	public ChatWindow(ChatManager chatMgr, LocaleManager localeManager,
+			Composite parent, int style) {
 		super(parent, style);
 		chatManager = chatMgr;
 		this.localeManager = localeManager;
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 2;
 		gridLayout.horizontalSpacing = 2;
-		setLayout(gridLayout);	
-		
+		setLayout(gridLayout);
+
 		grpUsers = new Group(this, SWT.NONE);
 		GridData gd_grpUsers = new GridData(GridData.FILL_VERTICAL);
 		gd_grpUsers.widthHint = 138;
 		grpUsers.setLayoutData(gd_grpUsers);
 		grpUsers.setLayout(new FillLayout(SWT.HORIZONTAL));
-		
+
 		users = new List(grpUsers, SWT.BORDER);
-		
+
 		table = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.setLinesVisible(false);
-		
+
 		tblclmnTime = new TableColumn(table, SWT.NONE);
 		tblclmnTime.setWidth(100);
-		
+
 		tblclmnUser = new TableColumn(table, SWT.NONE);
 		tblclmnUser.setWidth(100);
-		
+
 		tblclmnMessage = new TableColumn(table, SWT.NONE);
 		tblclmnMessage.setWidth(100);
 
-		int[] mask = {100, 100, 0}; 
+		int[] mask = { 100, 100, 0 };
 		new TableResizer(table, mask);
-		
+
 		composite = new Composite(this, SWT.NONE);
 		GridData lData = new GridData(GridData.FILL_HORIZONTAL);
 		lData.horizontalSpan = 2;
@@ -87,12 +91,12 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 		lData.minimumHeight = 70;
 		composite.setLayoutData(lData);
 		composite.setLayout(new BorderLayout());
-		
+
 		text = new Text(composite, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
-		
+
 		btnSend = new Button(composite, SWT.NONE);
 		btnSend.setLayoutData(BorderLayout.EAST);
-		
+
 		btnSend.addListener(SWT.MouseUp, new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
@@ -101,11 +105,11 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 				text.setText("");
 				chatManager.sendMessage(msg);
 			}
-			
+
 		});
-		
+
 		chatMembers = new HashMap<String, UserInfo>();
-		
+
 		localeManager.addLocalizedObject(this);
 	}
 
@@ -124,10 +128,10 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 		this.layout();
 		composite.layout();
 	}
-	
+
 	private void displayUsers() {
 		System.out.println("DisplayUsers");
-		getDisplay().asyncExec(new Runnable(){
+		getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				users.removeAll();
@@ -139,27 +143,42 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 	}
 
 	@Override
-	public void addUser(UserInfo info) {
-		System.out.println("Add user " + info.id);
-		chatMembers.put(info.id, info);
-		displayUsers();
+	public void addUser(final UserInfo info) {
+		getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				Log.writeDebug("Add user " + info.id);
+				chatMembers.put(info.id, info);
+				displayUsers();
+			}
+		});
 	}
 
 	@Override
-	public void updateUser(UserInfo info) {
-		chatMembers.put(info.id, info);
-		displayUsers();		
+	public void updateUser(final UserInfo info) {
+		getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				chatMembers.put(info.id, info);
+				displayUsers();
+			}
+		});
 	}
 
 	@Override
-	public void removeUser(String id) {
-		chatMembers.remove(id);
-		displayUsers();
+	public void removeUser(final String id) {
+		getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				chatMembers.remove(id);
+				displayUsers();
+			}
+		});
 	}
 
 	@Override
-	public void newMessgae(final Message message) {
-		getDisplay().asyncExec(new Runnable(){
+	public void newMessage(final Message message) {
+		getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				TableItem item = new TableItem(table, SWT.NONE);
@@ -167,7 +186,7 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 				item.setText(1, message.fromName);
 				item.setText(2, message.text);
 			}
-			
+
 		});
 	}
 }
