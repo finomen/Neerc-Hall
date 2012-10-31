@@ -169,8 +169,8 @@ public class TaskWindow extends Composite implements TaskListener, Localized {
 		for (Task.TaskPerformer performer : task.getPerformerList()) {
 			for (int i = 3; i < table.getColumnCount(); ++i) {
 				if (performer.equals(table.getColumns()[table.getColumnOrder()[i]].getData())) {
-					row.setText(table.getColumnOrder()[i], task.getState(performer).getMessage());
 					row.setImage(table.getColumnOrder()[i], new Image(getDisplay(), "resources/icons/STATUS_" + task.getState(performer).getId().name() + ".png"));
+					row.setText(table.getColumnOrder()[i], task.getState(performer).getMessage());
 				}
 			}
 		}

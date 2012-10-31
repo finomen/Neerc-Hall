@@ -3,11 +3,11 @@ hall:
     xmpp:
       smack:
         debug: false
-      name: test
+      name: admin
       server:
         port: 5222
         host: finomen.kt15.ru
-      password: test
+      password: Schadel
       room: neerc@conference.finomen.kt15.ru
       service: neerc.finomen.kt15.ru
       ping:

@@ -119,7 +119,7 @@ public class TaskStateChange extends Dialog implements Localized {
 		btnAssigned.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				text.setEnabled(false);
+				text.setEnabled(true); //FIXME: just for old question task
 			}
 		});
 		
@@ -158,14 +158,14 @@ public class TaskStateChange extends Dialog implements Localized {
 		case UPDATING:
 			break;
 		}
-		
+				
 		btnFailed.setSelection(true);
-		
+				
 		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				if (btnAssigned.getSelection()) {
-					task.changeState(Task.TaskState.assigned());
+					task.changeState(Task.TaskState.assigned(text.getText()));
 				} else if (btnInProgress.getSelection()) {
 					task.changeState(Task.TaskState.inProgress(text.getText()));
 				} else if (btnDone.getSelection()) {

@@ -76,6 +76,10 @@ public class Task {
 		public static TaskState assigned() {
 			return new TaskState(StateId.ASSIGNED);
 		}
+		
+		public static TaskState assigned(String message) {
+			return new TaskState(StateId.ASSIGNED, message);
+		}
 
 		public static TaskState updating() {
 			return new TaskState(StateId.UPDATING);
