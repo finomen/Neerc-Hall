@@ -43,7 +43,7 @@
 		<jar jarfile="neerc-timer.jar" basedir="${bin}" includes="ru/kt15/finomen/neerc/timer/**">
 			<manifest>
 	            <attribute name="Main-Class" value="ru.kt15.finomen.neerc.timer.TimerWindow"/>
-				<attribute name="Class-Path" value="swt.jar snakeyaml-1.11.jar neerc-core.jar"/>
+				<attribute name="Class-Path" value="swt.jar snakeyaml-1.11.jar neerc-core.jar pcms2-client.jar"/>
 	        </manifest>
 		</jar>
 	</target>
