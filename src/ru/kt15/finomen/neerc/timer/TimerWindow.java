@@ -23,15 +23,15 @@ import ru.kt15.finomen.neerc.core.SynchronizedTime;
 public class TimerWindow {
 	private final Shell shell;
 	private long duration;
-	private long remaining;
+	private SynchronizedTime clock = new SynchronizedTime(0, true);
 	private TimerStatus status; 
-	private final SynchronizedTime time;
 	private final Map<String, String> colors;
 	private final Map<String, String> fonts;
 	private final Map<String, String> backgrounds;
 	private final Map<String, String> timeFmt;
 	private final Map<String, Object> colorMap;
 	private final TimerSocket socket;
+	private final PCMS2ClientSocket clientSocket;
 	
 	@SuppressWarnings("unchecked")
 	TimerWindow() throws IOException {
@@ -50,9 +50,7 @@ public class TimerWindow {
 		backgrounds = (Map<String, String>)data.get("backgrounds");
 				
 		duration = 5 * 60 * 60 * 1000;
-		remaining = duration;
 		status = TimerStatus.BEFORE;
-		time = new SynchronizedTime(remaining, false);//true);
 		
 		shell = new Shell();
 			
@@ -80,7 +78,19 @@ public class TimerWindow {
 			}
 		}).start();
 		
-		socket = new TimerSocket(this, (Map<String, Object>)data.get("network"));
+		if (data.get("network-type").equals("client")) {
+			socket = null;
+			clientSocket = new PCMS2ClientSocket(this, (Map<String, Object>)data.get("network"));
+		} else if (data.get("network-type").equals("udp")) {
+			socket = new TimerSocket(this, (Map<String, Object>)data.get("network"));
+			clientSocket = null;
+		} else {
+			socket = null;
+			clientSocket = null;
+			Log.writeError("Invalid network-type " + (String)data.get("network-type"));
+			shell.close();
+		}
+			
 	}
 	
 	private long strToTime(String s) {
@@ -101,16 +111,14 @@ public class TimerWindow {
 		shell.getDisplay().asyncExec(new Runnable() {@Override
 			public void run() {
 				duration = Duration;
-				remaining = Remaining; //TODO: smart clock
+				clock.sync(duration - Remaining);
 				status = Status;
 							
 				if (status != TimerStatus.RUNNING) {
-					time.freeze();
+					clock.freeze();
 				} else {
-					time.resume();
-				}
-				
-				time.sync(remaining);
+					clock.resume();
+				}				
 			}
 		});
 	}
@@ -186,7 +194,7 @@ public class TimerWindow {
 	}
 
 	private void repaint() {
-		long cTime = time.get() / 1000;
+		long cTime = clock.get() / 1000;
 		String timeFmt = getNearest(this.timeFmt, cTime, "H:MM:SS");		
 		String background = getNearest(this.backgrounds, cTime, "resources/background.jpg");
 		String color = getNearest(this.colors, cTime, "Salmon");
@@ -233,7 +241,7 @@ public class TimerWindow {
 	}
 	
 	private void rearrange() {
-		long cTime = time.get() / 1000;
+		long cTime = clock.get() / 1000;
 		String timeFmt = currentTimeFmt = getNearest(this.timeFmt, cTime, "H:MM:SS");		
 		currentBackground = getNearest(this.backgrounds, cTime, "resources/background.jpg");
 		String color = currentColor = getNearest(this.colors, cTime, "Salmon");

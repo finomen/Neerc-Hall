@@ -1,43 +1,44 @@
 package ru.kt15.finomen.neerc.core;
 
 public class SynchronizedTime {
-	private final long cTime; 
-	private long sync;
+	private final long startTime; 
 	private long frozen, correction;
+		
 	public SynchronizedTime(long time, boolean frozen) {
-		cTime = time;
-		sync = System.currentTimeMillis();
+		startTime = System.nanoTime() / 1000;
 		correction = 0;
-		if (frozen)
-			this.frozen = System.currentTimeMillis();
+		if (frozen) {
+			this.frozen = 0;
+		} else {
+			this.frozen = -1;
+		}
 	}
 
-	public long get() {
-		if (frozen == 0) {
-			return Math.max(0, cTime + sync - System.currentTimeMillis() + correction);
+	synchronized public long get() {
+		if (frozen >= 0) {
+			return frozen;
 		} else {
-			return Math.max(0, cTime + sync - frozen + correction);
+			return System.nanoTime() / 1000 - startTime + correction;
 		}
 	}
 	
-	public void sync(long time) {
-		long ct = System.currentTimeMillis();
-		long diff = time - get();
-		correction += diff;
-		//sync = ct;
-		//Log.writeDebug("SYNC " + time + " " + sync + " " + diff + " " + cTime + " = " + get());
-	}
-
-	public void freeze() {
-		if (frozen == 0) {
-			frozen = System.currentTimeMillis();
+	synchronized public void sync(long time) {
+		if (Math.abs(time - get()) > 1000 ) {
+			Log.writeError("Something wrong with clock, diff: " + (get() - time));
 		}
+			
+		correction += time - get();
 	}
 
-	public void resume() {
-		if (frozen != 0) {
-			correction += System.currentTimeMillis() - frozen;
-			frozen = 0;
-		}	
+	synchronized public void freeze() {
+		frozen = get();
+	}
+
+	synchronized public void resume() {
+		if (frozen >= 0) {
+			long realTime = System.nanoTime() / 1000 - startTime;
+			correction = get() - realTime;
+			frozen = -1;
+		}
 	}
 }
