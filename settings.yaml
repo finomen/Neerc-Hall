@@ -3,13 +3,15 @@ hall:
     xmpp:
       smack:
         debug: false
-      name: admin
+      name: finomen
       server:
         port: 5222
-        host: finomen.kt15.ru
+        host: kt15.ru
       password: Schadel
-      room: neerc@conference.finomen.kt15.ru
-      service: neerc.finomen.kt15.ru
+      room: neerc@conference.kt15.ru
+      service: neerc.kt15.ru
       ping:
         enabled: true
         interval: 5
+    window:
+      sendByEnter: true

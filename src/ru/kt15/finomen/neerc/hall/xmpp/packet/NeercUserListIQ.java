@@ -6,6 +6,7 @@ import java.util.Collections;
 
 import org.xmlpull.v1.XmlPullParser;
 
+import ru.kt15.finomen.neerc.core.Log;
 import ru.kt15.finomen.neerc.hall.UserInfo;
 import ru.kt15.finomen.neerc.hall.xmpp.utils.XmlUtils;
 
@@ -57,6 +58,7 @@ public class NeercUserListIQ extends NeercIQ {
 	}
 
 	public void parse(XmlPullParser parser) throws Exception {
+		Log.writeDebug(parser.getText());
 		boolean done = false;
 		while (!done) {
 			int eventType = parser.next();

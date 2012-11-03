@@ -323,6 +323,8 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
             if (!(packet instanceof org.jivesoftware.smack.packet.Message)) {
                 return;
             }
+            
+            Log.writeDebug(packet.toXML());
 
             org.jivesoftware.smack.packet.Message xmppMessage = (org.jivesoftware.smack.packet.Message) packet;
 
@@ -332,7 +334,7 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
                     DelayInformation delayInformation = (DelayInformation) extension;
                     timestamp = delayInformation.getStamp();
                 } else {
-                    Log.writeDebug("Found unknown packet extenstion " + extension.getClass().getSimpleName() + " with namespace " + extension.getNamespace());
+                    Log.writeError("Found unknown packet extenstion " + extension.getClass().getSimpleName() + " with namespace " + extension.getNamespace());
                 }
             }
 
@@ -344,10 +346,11 @@ public class NeercXMPPConnection implements ChatManager, TaskManager {
 
             Message msg = new Message();
             msg.fromId = xmppMessage.getFrom();
-            msg.fromName = users.get(msg.fromId) == null ? msg.fromId : users.get(msg.fromId).name;
+            msg.fromName = users.get(msg.fromId) == null ? msg.fromId.substring(msg.fromId.indexOf("/") + 1, msg.fromId.length()) : users.get(msg.fromId).name;
             msg.toId = xmppMessage.getTo();
             msg.toName = users.get(msg.toId) == null ? msg.toId : users.get(msg.toId).name;
             msg.text = xmppMessage.getBody();
+            
             msg.time = timestamp;
             
             for (ChatListener listener: chatListeners) {

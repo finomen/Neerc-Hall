@@ -1,9 +1,18 @@
 package ru.kt15.finomen.neerc.hall.desktop;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
+import javax.swing.text.DateFormatter;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -21,10 +30,12 @@ import org.eclipse.swt.widgets.Text;
 import ru.kt15.finomen.neerc.core.LocaleManager;
 import ru.kt15.finomen.neerc.core.Localized;
 import ru.kt15.finomen.neerc.core.Log;
+import ru.kt15.finomen.neerc.core.SettingsManager;
 import ru.kt15.finomen.neerc.hall.ChatListener;
 import ru.kt15.finomen.neerc.hall.ChatManager;
 import ru.kt15.finomen.neerc.hall.Message;
 import ru.kt15.finomen.neerc.hall.UserInfo;
+import ru.kt15.finomen.neerc.hall.UserStatus;
 import swing2swt.layout.BorderLayout;
 
 public class ChatWindow extends Composite implements Localized, ChatListener {
@@ -66,7 +77,7 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 
 		users = new List(grpUsers, SWT.BORDER);
 
-		table = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
+		table = new Table(this, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -97,11 +108,36 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 		btnSend = new Button(composite, SWT.NONE);
 		btnSend.setLayoutData(BorderLayout.EAST);
 
+		text.addKeyListener(new KeyListener() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == '\r'
+						&& !(((e.stateMask & SWT.CTRL) == SWT.CTRL) && SettingsManager
+								.instance().get("hall.chat.window.sendByEnter",
+										false))) {
+					Message msg = new Message();
+					msg.text = text.getText();
+					msg.text = msg.text.substring(0, msg.text.length() - 2);
+
+					text.setText("");
+					chatManager.sendMessage(msg);
+					// FIXME: code duplication
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
 		btnSend.addListener(SWT.MouseUp, new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
 				Message msg = new Message();
 				msg.text = text.getText();
+				msg.text = msg.text.substring(0, msg.text.length() - 2);
 				text.setText("");
 				chatManager.sendMessage(msg);
 			}
@@ -137,6 +173,8 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 				users.removeAll();
 				for (UserInfo ui : chatMembers.values()) {
 					users.add(ui.name);
+					//Image icon = new Image(getDisplay(), "resources/icons/user_" + 
+					//(ui.power ? "power" : "normal") + (ui.status == UserStatus.OFFLINE ? "_offline" : "")  + ".gif");
 				}
 			}
 		});
@@ -182,9 +220,12 @@ public class ChatWindow extends Composite implements Localized, ChatListener {
 			@Override
 			public void run() {
 				TableItem item = new TableItem(table, SWT.NONE);
-				item.setText(0, message.time.toString());
+				item.setText(0,
+						new SimpleDateFormat("HH:mm:ss").format(message.time));
 				item.setText(1, message.fromName);
-				item.setText(2, message.text);
+				String text = message.text;
+				item.setText(2, text);
+				table.showItem(item);
 			}
 
 		});
